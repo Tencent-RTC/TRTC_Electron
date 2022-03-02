@@ -1,5 +1,5 @@
 .idea
-node_modules
+**/node_modules
 out
 release
 .DS_Store

@@ -1,13 +1,37 @@
 const path = require('path');
-const glob = require('glob');
-const { app, BrowserWindow } = require('electron');
-const isDev = require('electron-is-dev');
+const { app, BrowserWindow, systemPreferences } = require('electron');
 
-const debug = /--debug/.test(process.argv[2]);
+let isDev = false;
+let debug = false;
+for (let i = 2; i < process.argv.length; i++) {
+  if (/--debug/.test(process.argv[i])) {
+    debug = true;
+  } else if (/--trtc_env=dev/.test(process.argv[i])) {
+    isDev = true;
+  }
+}
 
 if (process.mas) app.setName('TRTC Electron API Examples');
 
 let mainWindow = null;
+
+// 检查并申请设备权限：麦克风、摄像头、屏幕录制
+async function checkAndApplyDeviceAccessPrivilege() {
+  const cameraPrivilege = systemPreferences.getMediaAccessStatus('camera');
+  console.log(`checkAndApplyDeviceAccessPrivilege before apply cameraPrivilege: ${cameraPrivilege}`);
+  if (cameraPrivilege !== 'granted') {
+    await systemPreferences.askForMediaAccess('camera');
+  }
+
+  const micPrivilege = systemPreferences.getMediaAccessStatus('microphone');
+  console.log(`checkAndApplyDeviceAccessPrivilege before apply micPrivilege: ${micPrivilege}`);
+  if (micPrivilege !== 'granted') {
+    await systemPreferences.askForMediaAccess('microphone');
+  }
+
+  const screenPrivilege = systemPreferences.getMediaAccessStatus('screen');
+  console.log(`checkAndApplyDeviceAccessPrivilege before apply screenPrivilege: ${screenPrivilege}`);
+}
 
 function initialize() {
   makeSingleInstance();
@@ -46,7 +70,8 @@ function initialize() {
     });
   }
 
-  app.whenReady().then(() => {
+  app.whenReady().then(async () => {
+    await checkAndApplyDeviceAccessPrivilege();
     createWindow();
 
     app.on('activate', () => {
@@ -83,10 +108,11 @@ function makeSingleInstance() {
   });
 }
 
-// Require each JS file in the main-process dir
+// Require each JS file in the src/app/main dir
 function loadMainModules() {
-  const files = glob.sync(path.join(__dirname, 'src/app/main/**/*.js'));
-  files.forEach(file => require(file));
+  ['src/app/main/communication/index.js'].forEach(filePath => {
+    require(path.join(__dirname, filePath));
+  });
 }
 
 initialize();

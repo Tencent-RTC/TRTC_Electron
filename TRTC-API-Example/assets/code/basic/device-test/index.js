@@ -120,7 +120,7 @@
 
     trtc.startMicDeviceTest(500);
 
-    const testFilePath = `${window.ROOT_PATH}/testspeak.mp3`;
+    const testFilePath = 'https://web.sdk.qcloud.com/trtc/electron/download/resources/media/TestSpeaker.mp3';
     console.log(`Speaker test file path: ${testFilePath}`);
     trtc.startSpeakerDeviceTest(testFilePath);
   }
