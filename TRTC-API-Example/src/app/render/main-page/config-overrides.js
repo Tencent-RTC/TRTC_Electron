@@ -2,6 +2,7 @@ const path = require('path');
 const os = require('os');
 
 console.log('process.env.NODE_ENV:', process.env.NODE_ENV);
+const isProduction = process.env.NODE_ENV === 'production';
 
 const TARGET_PLATFORM = (function(){
   let target = '';
@@ -36,7 +37,9 @@ module.exports = function override(config, env) {
       emit: true,
       // rewritePath: 'src/app/render/main-page/node_modules/trtc-electron-sdk/build/Release'
       rewritePath: process.env.NODE_ENV === 'production'
-        ? TARGET_PLATFORM === 'win32' ? './resources' : '../Resources'
+        ? TARGET_PLATFORM === 'win32' 
+          ? './resources/app.asar/node_modules/trtc-electron-sdk/build/Release'
+          : '../Resources/app/node_modules/trtc-electron-sdk/build/Release'
         : 'src/app/render/main-page/node_modules/trtc-electron-sdk/build/Release'
     }
   });
@@ -45,7 +48,9 @@ module.exports = function override(config, env) {
   // https://webpack.js.org/configuration/node/#node
   config.node.process = false;
 
-  // config.devtool = 'eval';
+  if (isProduction) {
+    config.devtool = false;
+  }
 
   return config;
 }

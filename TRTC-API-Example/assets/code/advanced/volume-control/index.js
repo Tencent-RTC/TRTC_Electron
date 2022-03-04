@@ -20,7 +20,7 @@
 
   const audioMusicParam = new AudioMusicParam();
   audioMusicParam.id = 1;
-  audioMusicParam.path = `${window.ROOT_PATH}/testbgm.mp3`;
+  audioMusicParam.path = 'https://web.sdk.qcloud.com/trtc/electron/download/resources/media/bgm/PositiveHappyAdvertising.mp3';
   audioMusicParam.publish = true;
   audioMusicParam.loopCount = 100;
 
