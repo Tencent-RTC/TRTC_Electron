@@ -23,7 +23,7 @@ export default function ProfileMenu(props) {
   };
 
   const handleGitHub = () => {
-    window.shell.openExternal('https://github.com/LiteAVSDK/TRTC_Electron/tree/main/TRTC-API-Example');
+    window.shell.openExternal('https://github.com/tencentyun/TRTCSDK/tree/master/Electron/TRTC-API-Example');
     handleClose();
   };
 

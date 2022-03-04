@@ -14,7 +14,7 @@ TRTC Electron API Examples 演示 [TRTC Electron API](https://web.sdk.qcloud.com
 │   ├── code                       // 示例代码
 │   │    ├── basic                 // 基础功能示例代码
 │   │    ├── advanced              // 高级功能示例代码
-│   ├── debug                      // 包含 GenerateTestUserSig，用于本地生成测试用的 UserSig
+│   ├── debug                      // 包含 gen-test-user-sig.js，用于本地生成测试用的 UserSig
 ├── main.js                        // electron 主进程入口文件
 ├── preload.js                     // electron 窗口预加载脚本
 ├── package.json                   // 工程配置
@@ -66,13 +66,14 @@ TRTC Electron API Examples 演示 [TRTC Electron API](https://web.sdk.qcloud.com
 
 ### 步骤3：运行 API Examples
 > ⚠️注意：
-> 1. 建议 node 环境为 v14.16.0
+> 1. 建议 node 环境为 v14.16.0 及以上版本
 
 #### 1. 安装依赖
 ```bash
 npm install
 cd src/app/render/main-page
 npm install
+cd ../../../..
 ```
 
 #### 2. 开发环境运行
@@ -106,4 +107,9 @@ TRTC SDK 6.6 版本（2019年08月）开始启用新的签名算法 HMAC-SHA256�
 3. 选择【快速上手】页签，单击【第二步 获取签发UserSig的密钥】区域的【点此升级】。
 
 ### 2. 终端出现提示“Electron failed to install correctly”
-可参考 [Electron 常见问题收录](https://cloud.tencent.com/developer/article/1616668) 对 Electron 进行手动安装
+可参考 [Electron 常见问题收录](https://cloud.tencent.com/developer/article/1616668) 对 Electron 进行手动安装。
+
+### 3. 常见问题参考文档
+1. 官网收录常见问题：<https://cloud.tencent.com/document/product/647/62562>。
+
+2. 腾讯云开发者论坛收录常见问题：<https://cloud.tencent.com/developer/article/1616668>。
