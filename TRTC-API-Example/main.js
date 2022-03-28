@@ -47,7 +47,7 @@ function initialize() {
       webPreferences: {
         nodeIntegration: true,
         preload: path.join(__dirname, 'preload.js')
-      }
+      },
     };
 
     mainWindow = new BrowserWindow(windowOptions);
