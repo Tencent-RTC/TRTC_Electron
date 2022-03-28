@@ -22,6 +22,9 @@ function Layout(props) {
       code: codeMirrorRef.current.editor.getValue(),
       type: props.type
     });
+    window.appMonitor?.reportEvent(props.type.split('-').map(item => {
+      return item.charAt(0).toUpperCase() + item.substring(1);
+    }).join(''));
   }
 
   const stopDemo = useCallback(() => {
@@ -40,6 +43,7 @@ function Layout(props) {
 
   useEffect(() => {
     const beforeUnloadHandler = (event) => {
+      window.appMonitor?.clearStorage();
       if (isPreviewing) {
         stopDemo();
 
@@ -51,9 +55,9 @@ function Layout(props) {
         return event.returnValue = 'Are you sure to leave or quit?';
       }
     }
-    window.addEventListener('beforeunload', beforeUnloadHandler, {capture: true});
+    window.addEventListener('beforeunload', beforeUnloadHandler);
     return () => {
-      window.removeEventListener('beforeunload', beforeUnloadHandler, {capture: true});
+      window.removeEventListener('beforeunload', beforeUnloadHandler);
     }
   }, [isPreviewing, stopDemo])
 

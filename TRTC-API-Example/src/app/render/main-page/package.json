@@ -1,5 +1,6 @@
 {
   "name": "main-page",
+  "productName": "trtcElectronApiExamplesExternal",
   "version": "0.1.0",
   "private": true,
   "homepage": ".",
