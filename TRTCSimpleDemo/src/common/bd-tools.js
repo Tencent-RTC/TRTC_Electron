@@ -15,24 +15,24 @@ export class BDVideoEncode {
     this.encParam.enableAdjustRes = true;
   }
   get help() {
-    let helpOpt =  {
-      'videoResolution': {
+    const helpOpt =  {
+      videoResolution: {
         type: Object.values(TRTCVideoResolution),
         current: this.encParam.videoResolution,
       },
-      'resMode': {
+      resMode: {
         type: Object.values(TRTCVideoResolutionMode),
         current: this.encParam.resMode,
       },
-      'videoFps': {
+      videoFps: {
         type: 'number',
         current: this.encParam.videoFps,
       },
-      'videoBitrate': {
+      videoBitrate: {
         type: 'number',
         current: this.encParam.videoBitrate,
       },
-      'enableAdjustRes': {
+      enableAdjustRes: {
         type: 'boolean',
         current: this.encParam.enableAdjustRes,
       },
@@ -42,7 +42,7 @@ export class BDVideoEncode {
   }
 
   update() {
-    console.log('setVideoEncoderParam',this.encParam);
+    console.log('setVideoEncoderParam', this.encParam);
     this.trtc.setVideoEncoderParam(this.encParam);
   }
 
@@ -71,13 +71,13 @@ export class BDVideoEncode {
 export class BDBeauty {
   constructor(trtc) {
     this.trtc = trtc;
-    this._style = TRTCBeautyStyle.TRTCBeautyStyleNature
+    this._style = TRTCBeautyStyle.TRTCBeautyStyleNature;
     this._beauty = 5;
     this._white = 5;
     this._ruddiness = 5;
   }
   get help() {
-    let helpOpt = {
+    const helpOpt = {
       style: {
         type: Object.values(TRTCBeautyStyle),
         current: this._style,
@@ -106,7 +106,7 @@ export class BDBeauty {
     this._style = parseInt(value);
     this.update();
   }
-  
+
   set beauty(value) {
     this._beauty = parseInt(value);
     this.update();

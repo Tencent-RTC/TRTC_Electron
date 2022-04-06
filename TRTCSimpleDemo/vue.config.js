@@ -58,7 +58,10 @@ let vueCliConfig = {
     },
     plugins: [
       new StringReplaceWebpackPlugin(),
-    ]
+    ],
+    node: {
+      process: false
+    }
   }
 }
 
