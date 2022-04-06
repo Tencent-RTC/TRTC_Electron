@@ -1,5 +1,6 @@
 import axios from 'axios';
-const LIVE_ROOM_SERVICE= 'https://service-c2zjvuxa-1252463788.gz.apigw.tencentcs.com/release/forTest';
+
+const LIVE_ROOM_SERVICE = 'https://service-c2zjvuxa-1252463788.gz.apigw.tencentcs.com/release/forTest';
 const APP_NAME = 'trtc-electron-simple-demo:live';
 export const createLiveRoom = function (roomId) {
   if (!roomId) {
@@ -15,7 +16,7 @@ export const createLiveRoom = function (roomId) {
         roomId: roomId.toString()
       }
   });
-}
+};
 
 export const getLiveRoomList = function () {
   return axios.request({
@@ -27,9 +28,9 @@ export const getLiveRoomList = function () {
       type: '1',
     },
   });
-}
+};
 
-export const destroyLiveRoom = function  (roomId) {
+export const destroyLiveRoom = function (roomId) {
   if (!roomId) {
     return Promise.reject('need roomId');
   }
@@ -41,6 +42,6 @@ export const destroyLiveRoom = function  (roomId) {
       appId: APP_NAME,
       roomId: roomId.toString(),
       type: '1',
-  }
-});
-}
+    }
+  });
+};

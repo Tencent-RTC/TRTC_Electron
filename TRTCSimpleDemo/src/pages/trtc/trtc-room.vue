@@ -100,6 +100,20 @@ export default {
   },
 
   methods: {
+    /**
+     * SDK 不可恢复的错误，一定要监听，并分情况给用户适当的界面提示。
+     */
+    onError(errCode, errMsg) {
+      logger.error(`SDK onError: ${errCode} ${errMsg}`);
+      window.appMonitor?.reportEvent('EnterVideoRoom', `failed#error:${errCode} ${errMsg}`);
+    },
+
+    /**
+     * 用于告知您一些非严重性问题，例如出现了卡顿或者可恢复的解码失败。
+     */
+    onWarning(warningCode, warningMsg) {
+      logger.warn(`SDK onWarning: ${warningCode} ${warningMsg}`);
+    },
 
    /**
     * 当进入房间时触发的回调
@@ -400,11 +414,11 @@ export default {
   mounted() {
     // 没有摄像头，有麦克风，可以音频
     if (trtcState.isCameraReady() === false) {
-      this.warn('找不到可用的摄像头，观众将无法看到您的画面。');
+      this.warn('找不到可用的摄像头，远端用户将无法看到您的画面。');
     }
     // 有摄像头，没有麦克风，可以视频
     if (trtcState.isMicReady() === false) {
-      this.warn('找不到可用的麦克风，观众将无法听到您的声音。');
+      this.warn('找不到可用的麦克风，远端用户将无法听到您的声音。');
     }
     // 1. 获取用于承载视频的 HTMLElement；
     this.videoContainer = document.querySelector('#video-container');
@@ -428,6 +442,8 @@ export default {
     logger.warn(`sdk version: ${trtcCloud.getSDKVersion()}`);
 
     // 4. 配置基本的事件订阅
+    trtcCloud.on('onError', this.onError.bind(this));
+    trtcCloud.on('onWarning', this.onWarning.bind(this));
     trtcCloud.on('onStatistics', (statis)=>{logger.log('onStatistics', statis);});
     trtcCloud.on('onEnterRoom', this.onEnterRoom.bind(this));
     trtcCloud.on('onExitRoom', this.onExitRoom.bind(this));
@@ -438,7 +454,7 @@ export default {
     logger.log(`mounted, setCurrentCameraDevice('${this.cameraId}')`);
     trtcCloud.setCurrentCameraDevice(this.cameraId);
     // 5. 设置编码参数
-    // TRTCVideoEncParam 的详细说明，请参考： https://web.sdk.qcloud.com/trtc/electron/doc/zh-cn/trtc_electron_sdk/TRTCVideoEncParam.html
+    // TRTCVideoEncParam 的详细说明，请参考： https://trtc-1252463788.file.myqcloud.com/electron_sdk/docs/TRTCVideoEncParam.html
     let encParam = new TRTCVideoEncParam();
 
     /**
@@ -462,11 +478,11 @@ export default {
     trtcCloud.setVideoEncoderParam(encParam)
 
     // 6. 开启美颜 
-    // setBeautyStyle 详细信息，请参考：https://web.sdk.qcloud.com/trtc/electron/doc/zh-cn/trtc_electron_sdk/TRTCCloud.html#setBeautyStyle
+    // setBeautyStyle 详细信息，请参考：https://trtc-1252463788.file.myqcloud.com/electron_sdk/docs/TRTCCloud.html#setBeautyStyle
     trtcCloud.setBeautyStyle(TRTCBeautyStyle.TRTCBeautyStyleNature, 5, 5, 5);
 
     // 7. 进入房间
-    // TRTCParams 详细说明，请查看文档：https://web.sdk.qcloud.com/trtc/electron/doc/zh-cn/trtc_electron_sdk/TRTCParams.html
+    // TRTCParams 详细说明，请查看文档：https://trtc-1252463788.file.myqcloud.com/electron_sdk/docs/TRTCParams.html
     let param = new TRTCParams();
     param.sdkAppId = this.sdkInfo.sdkappid;
     param.userSig = this.sdkInfo.userSig;
@@ -479,7 +495,8 @@ export default {
      * TRTCAppScene.TRTCAppSceneVideoCall: 视频通话场景，适合[1对1视频通话]、[300人视频会议]、[在线问诊]、[视频聊天]、[远程面试]等。
      */
     trtcCloud.enterRoom(param, TRTCAppScene.TRTCAppSceneVideoCall);
-
+    window.appMonitor?.reportEvent('EnterVideoRoom', 'success');
+    
     // 挂到 windows BOM 下，方便调试。
     window.trtc = trtcCloud;
     window.videoEncode = new BDVideoEncode(trtcCloud);
