@@ -1,4 +1,5 @@
 本文主要介绍如何快速运行腾讯云 TRTC Demo（Electron）。
+
 ![演示](https://demovideo-1252463788.cos.ap-shanghai.myqcloud.com/electron/livemode.gif)
 
 ## 前提条件
@@ -18,7 +19,7 @@
 
 ### 步骤2：下载 SDK 和 Demo 源码
 
-1.  鼠标移动至对应卡片，单击【[Github](https://github.com/LiteAVSDK/TRTC_Electron/tree/main/Electron)】跳转至 Github（或单击【[ZIP](https://web.sdk.qcloud.com/trtc/electron/download/TXLiteAVSDK_TRTC_Electron_latest.zip)】），下载相关 SDK 及配套的 Demo 源码。
+1.  鼠标移动至对应卡片，单击【[Github](https://github.com/LiteAVSDK/TRTC_Electron/tree/main/TRTCSimpleDemo)】跳转至 Github（或单击【[ZIP](https://web.sdk.qcloud.com/trtc/electron/download/TXLiteAVSDK_TRTC_Electron_latest.zip)】），下载相关 SDK 及配套的 Demo 源码。
     ![img](https://main.qcloudimg.com/raw/6273f79193eb7af25eff64020a0ea476.png)
 2.  下载完成后，返回实时音视频控制台，单击【我已下载，下一步】，可以查看 SDKAppID 和密钥信息。<span id="idandkey" name="idandkey"> </span>
 

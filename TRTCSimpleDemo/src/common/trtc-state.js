@@ -26,7 +26,7 @@ class TRTCState {
           speaker: this.speaker,
           micVolume: this.micVolume,
           speakerVolume: this.speakerVolume,
-        })
+        });
       }
   }
 
@@ -44,13 +44,13 @@ class TRTCState {
   }
 
   isCameraReady() {
-      let deviceInfo = trtcCloud.getCurrentCameraDevice();
-      if (deviceInfo && deviceInfo.deviceId!='') {
+      const deviceInfo = trtcCloud.getCurrentCameraDevice();
+      if (deviceInfo && deviceInfo.deviceId != '') {
         this.camera = true;
         return true;
       }
-      let deviceList = trtcCloud.getCameraDevicesList();
-      if (deviceList.length >= 1 ) {
+      const deviceList = trtcCloud.getCameraDevicesList();
+      if (deviceList.length >= 1) {
         if (deviceList.length > 1) {
           trtcCloud.setCurrentCameraDevice(deviceList[0].deviceId);
         }
@@ -61,13 +61,13 @@ class TRTCState {
   }
 
   isMicReady() {
-      let deviceInfo = trtcCloud.getCurrentMicDevice();
-      if (deviceInfo && deviceInfo.deviceId!='') {
+      const deviceInfo = trtcCloud.getCurrentMicDevice();
+      if (deviceInfo && deviceInfo.deviceId != '') {
         this.mic = true;
         return true;
       }
-      let deviceList = trtcCloud.getMicDevicesList();
-      if (deviceList.length >= 1 ) {
+      const deviceList = trtcCloud.getMicDevicesList();
+      if (deviceList.length >= 1) {
         if (deviceList.length > 1) {
           trtcCloud.setCurrentMicDevice(deviceList[0].deviceId);
         }
@@ -78,13 +78,13 @@ class TRTCState {
   }
 
   isSpeakerReady() {
-      let deviceInfo = trtcCloud.getCurrentSpeakerDevice();
-      if (deviceInfo && deviceInfo.deviceId!='') {
+      const deviceInfo = trtcCloud.getCurrentSpeakerDevice();
+      if (deviceInfo && deviceInfo.deviceId != '') {
         this.speaker = true;
         return true;
       }
-      let deviceList = trtcCloud.getSpeakerDevicesList();
-      if (deviceList.length >= 1 ) {
+      const deviceList = trtcCloud.getSpeakerDevicesList();
+      if (deviceList.length >= 1) {
         if (deviceList.length > 1) {
           trtcCloud.setCurrentSpeakerDevice(deviceList[0].deviceId);
         }
@@ -94,7 +94,7 @@ class TRTCState {
       return false;
   }
 
-  getSpeakerVolume () {
+    getSpeakerVolume() {
     this.speakerVolume = trtcCloud.getCurrentSpeakerVolume();
     return this.speakerVolume;
   }
@@ -103,7 +103,7 @@ class TRTCState {
     this.micVolume = trtcCloud.getCurrentMicDeviceVolume();
     return this.micVolume;
   }
-
 }
+
 const trtcState = new TRTCState();
 export default trtcState;
