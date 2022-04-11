@@ -24,7 +24,7 @@ const genTestUserSig = function(userID) {
    * 它是腾讯云用于区分客户的唯一标识。
    */
 
-  var SDKAPPID = 0;
+  const SDKAPPID = 0;
 
 
   /**
@@ -33,7 +33,7 @@ const genTestUserSig = function(userID) {
    * 时间单位：秒
    * 默认时间：7 x 24 x 60 x 60 = 604800 = 7 天
    */
-  var EXPIRETIME = 604800;
+  const EXPIRETIME = 604800;
 
 
   /**
@@ -47,17 +47,31 @@ const genTestUserSig = function(userID) {
    * 文档：https://cloud.tencent.com/document/product/647/17275#Server
    */
 
-  var SECRETKEY = "";
+  const SECRETKEY = "";
+
+  window.appMonitor?.setSdkAppID(SDKAPPID);
+
+  if (SDKAPPID === 0 || SECRETKEY === '') {
+    const msg = '请先配置好您的账号信息： SDKAPPID 及 SECRETKEY，配置文件位置：src/debug/gen-test-user-sig.js';
+    console && console.error(msg);
+    alert && alert(msg);
+  }
 
   /*
    * 混流接口功能实现需要补齐此账号信息。
    * 获取途径：腾讯云网页控制台->实时音视频->您的应用(eg客服通话)->账号信息面板可以获取appid/bizid
    */
-  var APPID = 0;
-  var BIZID = 0;
+  const APPID = 0;
+  const BIZID = 0;
 
-  var generator = new LibGenerateTestUserSig(SDKAPPID, SECRETKEY, EXPIRETIME);
-  var userSig = generator.genTestUserSig(userID);
+  const generator = new LibGenerateTestUserSig(SDKAPPID, SECRETKEY, EXPIRETIME);
+  const userSig = generator.genTestUserSig(userID);
+
+  if (window.appMonitor) {
+    window.appMonitor?.setUid(`${SDKAPPID}-${userID}`);
+    window.appMonitor?.infoAll(`SDKAppId: ${SDKAPPID} - userId: ${userID} - generate User Sig`);
+  }
+  
   return {
     sdkappid: SDKAPPID,
     userSig: userSig,

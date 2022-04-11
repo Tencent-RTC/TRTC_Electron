@@ -99,10 +99,6 @@ import {BDVideoEncode, BDBeauty} from '../../common/bd-tools';
 const logger = new Log(`trtcRoom`);
 let trtcCloud = null; // 用于TRTCQcloud 实例， mounted 时实体化
 
-
-
-
-
 export default {
   components: {
     'show-screen-capture': showScreenCpature
@@ -146,6 +142,20 @@ export default {
   },
 
   methods: {
+    /**
+     * SDK 不可恢复的错误，一定要监听，并分情况给用户适当的界面提示。
+     */
+    onError(errCode, errMsg) {
+      logger.error(`SDK onError: ${errCode} ${errMsg}`);
+      window.appMonitor?.reportEvent('EnterLiveRoomAnchor', `failed#error:${errCode} ${errMsg}`);
+    },
+
+    /**
+     * 用于告知您一些非严重性问题，例如出现了卡顿或者可恢复的解码失败。
+     */
+    onWarning(warningCode, warningMsg) {
+      logger.warn(`SDK onWarning: ${warningCode} ${warningMsg}`);
+    },
 
     /**
      * 推流状态切换确认
@@ -187,6 +197,7 @@ export default {
       param.businessInfo = ''; // 业务数据（非必填）7.1.157 版本以上（含），可以忽略此参数，7.1.157 之前的版本建议赋值为空字符串
       param.role = TRTCRoleType.TRTCRoleAnchor; // 直播场景下的角色，仅适用于直播场景（TRTCAppSceneLIVE 和 TRTCAppSceneVoiceChatRoom），视频通话场景下指定无效。默认值：主播（TRTCRoleAnchor）
       trtcCloud.enterRoom(param, TRTCAppScene.TRTCAppSceneLIVE);
+      window.appMonitor?.reportEvent('EnterLiveRoomAnchor', 'success');
     },
 
     /** 
@@ -581,7 +592,8 @@ export default {
     logger.warn(`sdk version: ${trtcCloud.getSDKVersion()}`);
 
     // 4. 配置基本的事件订阅
-    trtcCloud.on('onError',(err)=>{logger.error(err)});
+    trtcCloud.on('onError', this.onError.bind(this));
+    trtcCloud.on('onWarning', this.onWarning.bind(this));
     trtcCloud.on('onEnterRoom', this.onEnterRoom.bind(this));
     trtcCloud.on('onExitRoom', this.onExitRoom.bind(this));
     trtcCloud.on('onUserVideoAvailable', this.onUserVideoAvailable.bind(this));

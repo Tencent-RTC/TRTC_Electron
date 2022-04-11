@@ -4,13 +4,13 @@
  * @param {boolean} toASCCIIStr - 是否生成随机 asccii 字符串
  * @return {string | number}
  */
-export default function(mult=1000, toASCCIIStr=false) {
+export default function (mult = 1000, toASCCIIStr = false) {
     if (toASCCIIStr === false) {
         return Math.floor(Math.random() * mult);
     }
-    let strModle = '0123456789abcdefghijklmnopqrstuvwxyz';
-    let numLen = Math.ceil(Math.log10(mult)+1);
-    let tmp = [];
+    const strModle = '0123456789abcdefghijklmnopqrstuvwxyz';
+    const numLen = Math.ceil(Math.log10(mult) + 1);
+    const tmp = [];
     tmp.length = numLen;
     for (let i = 0; i < numLen; i++) {
         tmp.push(strModle[Math.round(Math.random() * strModle.length)]);

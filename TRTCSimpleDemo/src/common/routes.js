@@ -7,14 +7,14 @@ import liveRoomAudience from '../pages/live/live-room-audience.vue';
 import notFound from '../pages/404.vue';
 
 
-let options = [
+const options = [
   {path: '/', redirect: '/index'},
   {path: '/index', name: 'index', component: index},
   {path: '/trtc-index', name: 'trtc-index', component: trtcIndex},
   {path: '/trtc-room/:userId/:roomId/:cameraId', name: 'trtc-rom', component: trtcRoom},
-  {path: '/live-index/:active?',name:'live-index', component: liveIndex},
-  {path: '/live-room-anchor/:userId/:roomId/:cameraId',name:'live-room-anchor', component: liveRoomAnchor},
-  {path: '/live-room-audience/:userId/:roomId',name:'live-room-audience', component: liveRoomAudience},
-  {path: '/404',name:'not-found', component: notFound},
+  {path: '/live-index/:active?', name: 'live-index', component: liveIndex},
+  {path: '/live-room-anchor/:userId/:roomId/:cameraId', name: 'live-room-anchor', component: liveRoomAnchor},
+  {path: '/live-room-audience/:userId/:roomId', name: 'live-room-audience', component: liveRoomAudience},
+  {path: '/404', name: 'not-found', component: notFound},
 ];
 export default options;
