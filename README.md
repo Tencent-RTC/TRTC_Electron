@@ -1,4 +1,7 @@
 ## 实时音视频（TRTC）Electron 版 SDK
+
+_[English](README.en.md) | 简体中文_
+
 实时音视频（TRTC）Electron 版 SDK 包含实时音视频和直播能力。腾讯实时音视频（Tencent Real-Time Communication，TRTC）将腾讯20多年来在网络与音视频技术上的深度积累，以多人音视频通话和低延时互动直播两大场景化方案，通过腾讯云服务向开发者开放，致力于帮助开发者快速搭建低成本、低延时、高品质的音视频互动解决方案。
 实时音视频（TRTC）产品请参见：[实时音视频（TRTC）](https://cloud.tencent.com/product/trtc)
 
