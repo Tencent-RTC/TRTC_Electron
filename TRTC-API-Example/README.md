@@ -1,5 +1,7 @@
 # TRTC API-Example
 
+_[English](README.en.md) | 简体中文_
+
 ## 前言
 TRTC Electron API Examples 演示 [TRTC Electron API](https://web.sdk.qcloud.com/trtc/electron/doc/zh-cn/trtc_electron_sdk/index.html) 的常见使用场景，方便客户了解 API 接口功能并快速接入到现有工程中，支持应用内编码、执行。
 

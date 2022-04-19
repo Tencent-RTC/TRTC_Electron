@@ -1,3 +1,5 @@
+_[English](README.en.md) | 简体中文_
+
 本文主要介绍如何快速运行腾讯云 TRTC Demo（Electron）。
 
 ![演示](https://demovideo-1252463788.cos.ap-shanghai.myqcloud.com/electron/livemode.gif)
