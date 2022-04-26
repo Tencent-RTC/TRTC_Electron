@@ -77,7 +77,7 @@ _[English](README.en.md) | 简体中文_
 
 	>   !
 	>
-	>   如果 Electron 安装较慢甚至超时，您可以参考文章：[Electron 常见问题收录](#https://cloud.tencent.com/developer/article/1616668) 中的 “安装时遇到的问题” 章节和 “附录：手动离线安装 Electron” 章节来完成 Electron 安装。
+	>   如果 Electron 安装较慢甚至超时，您可以参考文章：[Electron 常见问题收录](https://cloud.tencent.com/developer/article/1616668) 中的 “安装时遇到的问题” 章节和 “附录：手动离线安装 Electron” 章节来完成 Electron 安装。
 	
 	
 	
