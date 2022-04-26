@@ -2,12 +2,12 @@
 _English | [简体中文](README.md)_
 
 The TRTC Electron SDK provides real-time communication and live streaming capabilities. Leveraging Tencent's over 20 years of experience in network and audio/video technologies, Tencent Real-Time Communication (TRTC) offers solutions for group audio/video calls and low-latency interactive live streaming. With TRTC, you can quickly develop cost-effective, low-latency, and high-quality interactive audio/video services.
-For more information about TRTC, see [TRTC](https://cloud.tencent.com/product/trtc).
+For more information about TRTC, see [TRTC](https://intl.cloud.tencent.com/products/trtc).
 
 ## Directory Structure
 This directory contains the source code of two demo applications of the TRTC Electron SDK: `TRTC-API-Examples` and `TRTCSimpleDemo`.
 
--   TRTC-API-Examples: Demonstrates the common use cases of [TRTC APIs for Electron](https://web.sdk.qcloud.com/trtc/electron/doc/zh-cn/trtc_electron_sdk/index.html) to help you understand API features and quickly connect them to your existing project. It supports in-app encoding and execution.
+-   TRTC-API-Examples: Demonstrates the common use cases of [TRTC APIs for Electron](https://web.sdk.qcloud.com/trtc/electron/doc/en-us/trtc_electron_sdk/index.html) to help you understand API features and quickly connect them to your existing project. It supports in-app encoding and execution.
 -   TRTCSimpleDemo: The simplest sample code to demonstrate how to call TRTC APIs and use the most basic audio/video features.
 
 ```
@@ -40,10 +40,10 @@ This directory contains the source code of two demo applications of the TRTC Ele
 
 ## Demo Download
 
-TRTC demo for Electron is designed and implemented based on the TRTC SDK and contains various features, including real-time communication, low-latency live streaming, screen sharing, and beauty filters. You can download the demo files in [SDK Download](https://cloud.tencent.com/document/product/647/32689#TRTC).
+TRTC demo for Electron is designed and implemented based on the TRTC SDK and contains various features, including real-time communication, low-latency live streaming, screen sharing, and beauty filters. You can download the demo files in [Free Demo](https://intl.cloud.tencent.com/document/product/647/35076).
 
 ## Documentation
 
-- [TRTC SDK API documentation](https://web.sdk.qcloud.com/trtc/electron/doc/zh-cn/trtc_electron_sdk/index.html)
-- [TRTC SDK demo app](https://cloud.tencent.com/document/product/647/17021)
+- [TRTC SDK API documentation](https://web.sdk.qcloud.com/trtc/electron/doc/en-us/trtc_electron_sdk/index.html)
+- [TRTC SDK demo app](https://intl.cloud.tencent.com/document/product/647/35076)
 
