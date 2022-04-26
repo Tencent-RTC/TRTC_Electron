@@ -3,7 +3,7 @@
 _English | [简体中文](README.md)_
 
 ## Overview
-TRTC Electron API Examples: It demonstrates the common use cases of [TRTC APIs for Electron](https://web.sdk.qcloud.com/trtc/electron/doc/zh-cn/trtc_electron_sdk/index.html) to help you understand API features and quickly connect them to your existing project. It supports in-app encoding and execution.
+TRTC Electron API Examples: It demonstrates the common use cases of [TRTC APIs for Electron](https://web.sdk.qcloud.com/trtc/electron/doc/en-us/trtc_electron_sdk/index.html) to help you understand API features and quickly connect them to your existing project. It supports in-app encoding and execution.
 
 ## Directory Structure
 ```
@@ -112,6 +112,6 @@ Upgrade operation:
 Manually install Electron as instructed in [FAQs About Electron](https://cloud.tencent.com/developer/article/1616668).
 
 ### 3. FAQs
-1. FAQs at Tencent Cloud official website: <https://cloud.tencent.com/document/product/647/62562>.
+1. [FAQs at Tencent Cloud official website](https://intl.cloud.tencent.com/document/product/647/43093).
 
-2. FAQs in the Tencent Cloud developer forum: <https://cloud.tencent.com/developer/article/1616668>.
+2. [FAQs in the Tencent Cloud developer forum](https://cloud.tencent.com/developer/article/1616668).

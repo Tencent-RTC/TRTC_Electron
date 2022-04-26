@@ -112,6 +112,6 @@ TRTC SDK 6.6 版本（2019年08月）开始启用新的签名算法 HMAC-SHA256�
 可参考 [Electron 常见问题收录](https://cloud.tencent.com/developer/article/1616668) 对 Electron 进行手动安装。
 
 ### 3. 常见问题参考文档
-1. 官网收录常见问题：<https://cloud.tencent.com/document/product/647/62562>。
+1. [官网收录常见问题](https://cloud.tencent.com/document/product/647/62562)。
 
-2. 腾讯云开发者论坛收录常见问题：<https://cloud.tencent.com/developer/article/1616668>。
+2. [腾讯云开发者论坛收录常见问题](https://cloud.tencent.com/developer/article/1616668)。
