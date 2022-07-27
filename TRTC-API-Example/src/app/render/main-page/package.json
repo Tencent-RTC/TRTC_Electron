@@ -22,12 +22,12 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "sass": "^1.32.12",
-    "trtc-electron-sdk": "9.3.8-beta.3",
+    "trtc-electron-sdk": "latest",
     "typescript": "^4.2.4",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "cross-env BROWSER=none PORT=3000 react-app-rewired start",
+    "start": "cross-env BROWSER=none PORT=8080 react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",

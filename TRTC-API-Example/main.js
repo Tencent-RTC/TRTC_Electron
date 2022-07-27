@@ -53,7 +53,7 @@ function initialize() {
     mainWindow = new BrowserWindow(windowOptions);
 
     if (isDev) {
-      mainWindow.loadURL('http://localhost:3000');
+      mainWindow.loadURL('http://localhost:8080');
     } else {
       mainWindow.loadURL(path.join('file://', __dirname, '/src/app/render/main-page/build/index.html'));
     }

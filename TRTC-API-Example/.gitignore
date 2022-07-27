@@ -4,3 +4,4 @@ out
 release
 .DS_Store
 code-for-github
+package-lock.json
