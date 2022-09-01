@@ -1,5 +1,5 @@
 ## TRTC Electron SDK
-_English | [简体中文](README.md)_
+_English | [简体中文](README-zh_CN.md)_
 
 The TRTC Electron SDK provides real-time communication and live streaming capabilities. Leveraging Tencent's over 20 years of experience in network and audio/video technologies, Tencent Real-Time Communication (TRTC) offers solutions for group audio/video calls and low-latency interactive live streaming. With TRTC, you can quickly develop cost-effective, low-latency, and high-quality interactive audio/video services.
 For more information about TRTC, see [TRTC](https://intl.cloud.tencent.com/products/trtc).
