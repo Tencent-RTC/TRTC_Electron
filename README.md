@@ -1,50 +1,49 @@
-## 实时音视频（TRTC）Electron 版 SDK
+## TRTC Electron SDK
+_English | [简体中文](README-zh_CN.md)_
 
-_[English](README.en.md) | 简体中文_
+The TRTC Electron SDK provides real-time communication and live streaming capabilities. Leveraging Tencent's over 20 years of experience in network and audio/video technologies, Tencent Real-Time Communication (TRTC) offers solutions for group audio/video calls and low-latency interactive live streaming. With TRTC, you can quickly develop cost-effective, low-latency, and high-quality interactive audio/video services.
+For more information about TRTC, see [TRTC](https://intl.cloud.tencent.com/products/trtc).
 
-实时音视频（TRTC）Electron 版 SDK 包含实时音视频和直播能力。腾讯实时音视频（Tencent Real-Time Communication，TRTC）将腾讯20多年来在网络与音视频技术上的深度积累，以多人音视频通话和低延时互动直播两大场景化方案，通过腾讯云服务向开发者开放，致力于帮助开发者快速搭建低成本、低延时、高品质的音视频互动解决方案。
-实时音视频（TRTC）产品请参见：[实时音视频（TRTC）](https://cloud.tencent.com/product/trtc)
+## Directory Structure
+This directory contains the source code of two demo applications of the TRTC Electron SDK: `TRTC-API-Examples` and `TRTCSimpleDemo`.
 
-## 目录结构
-本目录包含 Electron 版 TRTC SDK 的 Demo App 源代码，主要包括以下2个 Demo App: TRTC-API-Examples 和 TRTCSimpleDemo。
-
--   TRTC-API-Examples: 演示 [TRTC Electron API](https://web.sdk.qcloud.com/trtc/electron/doc/zh-cn/trtc_electron_sdk/index.html) 的常见使用场景，方便客户了解 API 接口功能并快速接入到现有工程中，支持应用内编码、执行。
--   TRTCSimpleDemo：最简单的示例代码，主要演示 TRTC 的接口如何调用，以及最基本的音视频功能。
+-   TRTC-API-Examples: Demonstrates the common use cases of [TRTC APIs for Electron](https://web.sdk.qcloud.com/trtc/electron/doc/en-us/trtc_electron_sdk/index.html) to help you understand API features and quickly connect them to your existing project. It supports in-app encoding and execution.
+-   TRTCSimpleDemo: The simplest sample code to demonstrate how to call TRTC APIs and use the most basic audio/video features.
 
 ```
 ├─ TRTC-API-Examples
 ├── src
 │   ├── app
-│   │    ├── main                  // 主进程运行代码
-│   │    ├── render                // 渲染进程主窗口运行代码
+│   │    ├── main                  // Main process running code
+│   │    ├── render                // Main window running code of the renderer process
 ├── assets
 │   ├── app-icon
-│   ├── code                       // 示例代码
-│   │    ├── basic                 // 基础功能示例代码
-│   │    ├── advanced              // 高级功能示例代码
-│   ├── debug                      // 包含 GenerateTestUserSig，用于本地生成测试用的 UserSig
-├── main.js                        // electron 主进程入口文件
-├── preload.js                     // electron 窗口预加载脚本
-├── package.json                   // 工程配置
+│   ├── code                       // Sample code
+│   │    ├── basic                 // Sample code for basic features
+│   │    ├── advanced              // Sample code for advanced features
+│   ├── debug                      // Contains `GenerateTestUserSig` to generate a testing `UserSig` locally
+├── main.js                        // Electron main process entry file
+├── preload.js                     // Electron window preload script
+├── package.json                   // Project configuration
 ├── package-lock.json
 |
-├─ TRTCSimpleDemo                  // TRTC精简版Demo，包含通话模式和直播模式示例代码
-│  ├── main.electron.js             // Electron 主文件
-│  ├── package.json                 // 工程配置
-│  ├── vue.config.js                // vue-cli 工程文件
-│  ├── src                          // 源代码目录
+├─ TRTCSimpleDemo                  // TRTC Lite Edition demo containing the sample code of call and live streaming modes.
+│  ├── main.electron.js             // Main Electron file
+│  ├── package.json                 // Project configuration
+│  ├── vue.config.js                // Vue CLI project file
+│  ├── src                          // Source code directory
 │  │  ├── pages                     
-│  │  │  ├── trtc                   // 演示 TRTC 以通话模式运行的示例代码，该模式下无角色的概念
-│  │  │  ├── live                   // 演示 TRTC 以直播模式运行的示例代码，该模式下有角色的概念
-│  │  ├── debug                     // 包含 GenerateTestUserSig，用于本地生成测试用的 UserSig
+│  │  │  ├── trtc                   // The Demo for call mode in TRTC. In this mode, there is no concept of role
+│  │  │  ├── live                   // The Demo for live streaming mode in TRTC. In this mode, there is a concept of role
+│  │  ├── debug                     // Contains `GenerateTestUserSig` to generate a testing `UserSig` locally
 ```
 
-## Demo 下载
+## Demo Download
 
-Electron 版 TRTC Demo 基于 TRTCSDK 设计和实现，Demo 包含实时音视频通话、低延迟直播、屏幕分享、美颜在内的多项功能，请前往[SDK 下载页面](https://cloud.tencent.com/document/product/647/32689#TRTC)，下载 Electron 版 TRTC Demo 文件。
+TRTC demo for Electron is designed and implemented based on the TRTC SDK and contains various features, including real-time communication, low-latency live streaming, screen sharing, and beauty filters. You can download the demo files in [Free Demo](https://intl.cloud.tencent.com/document/product/647/35076).
 
-## 相关文档链接
+## Documentation
 
-- [SDK 的 API 文档](https://web.sdk.qcloud.com/trtc/electron/doc/zh-cn/trtc_electron_sdk/index.html)
-- [SDK 的官方体验 App](https://cloud.tencent.com/document/product/647/17021)
+- [TRTC SDK API documentation](https://web.sdk.qcloud.com/trtc/electron/doc/en-us/trtc_electron_sdk/index.html)
+- [TRTC SDK demo app](https://intl.cloud.tencent.com/document/product/647/35076)
 
