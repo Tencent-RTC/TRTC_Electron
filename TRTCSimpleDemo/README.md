@@ -63,8 +63,6 @@ _[English](README.en.md) | 简体中文_
 
 ### 步骤4：编译运行
 
-#### Windows 平台
-
 1.  安装 Node 最新版本，请参数[Nodejs 官网](https://nodejs.org/en/download/)
 
 2.  启动终端，切换到 项目目录，执行以下命令。
@@ -92,7 +90,9 @@ _[English](README.en.md) | 简体中文_
 | 命令 | 说明 |
 |--|--|
 | npm run start | 以开发环境运行 Demo |
-| npm run pack:mac | 打包 Mac 的 .dmg 安装文件 |
+| npm run pack:mac | 打包 Mac 的 App 文件和 .dmg 安装文件，安装包运行时的指令类型与构建机器 CPU 类型一相同。 |
+| npm run pack:mac-universal | 打包 Mac 的 App 文件和 .dmg 安装文件，安装包同时支持 X64 和 ARM64 架构的 CPU 类型。 |
+| npm run pack:win32 | 打包 Windows 32 位的 .exe 安装文件 |
 | npm run pack:win64 | 打包 Windows 64 位的 .exe 安装文件 |
 
 ## 常见问题
