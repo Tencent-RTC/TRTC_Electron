@@ -62,8 +62,6 @@ This directory contains the simplest sample code to demonstrate how to call TRTC
 
 ### Step 4. Compile and run the demo
 
-#### Windows
-
 1. Install the latest version of Node.js. For more information, visit [Node.js official website](https://nodejs.org/en/download/).
 
 2. Start the terminal, switch to the project directory, and run the following command.
@@ -91,7 +89,9 @@ This directory contains the simplest sample code to demonstrate how to call TRTC
 | Command | Description |
 |--|--|
 | npm run start | Runs the demo in development environment. |
-| npm run pack:mac | Packages the project into a DMG installer for macOS. |
+| npm run pack:mac | Packages the project into a DMG installer for macOS. Runtime instruction type is same with the builder machine CPU instruction type.|
+| npm run pack:mac-universal | Packages the project into a DMG installer for macOS. Runtime instruction supports both X64 and ARM64 CPU instruction types. |
+| npm run pack:win32 | Packages the project into a 32-bit EXE installer for Windows. |
 | npm run pack:win64 | Packages the project into a 64-bit EXE installer for Windows. |
 
 ## FAQs
