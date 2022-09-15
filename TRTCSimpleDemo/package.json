@@ -13,23 +13,23 @@
     "lint": "vue-cli-service lint",
     "electron": "node_modules/.bin/electron . --trtc_env=development",
     "compile:mac": "node_modules/.bin/electron-builder --mac",
+    "compile:mac-universal": "node_modules/.bin/electron-builder --mac --universal",
     "compile:win64": "node_modules/.bin/electron-builder --win --x64",
     "compile:win32": "node_modules/.bin/electron-builder --win --ia32",
     "pack:mac": "npm run build:mac && npm run compile:mac",
+    "pack:mac-universal": "npm run build:mac && npm run compile:mac-universal",
     "pack:win64": "npm run build:win && npm run compile:win64",
     "pack:win32": "npm run build:win && npm run compile:win32"
   },
   "build": {
-    "asar": false,
+    "asar": true,
+    "asarUnpack": "**\\*.{node,dll}",
     "productName": "trtc-electron-simple-demo",
     "appId": "com.tencent.trtc-electron-simple-demo",
     "icon": "public/trtc-logo.png",
     "directories": {
       "output": "./bin"
     },
-    "extraFiles": [
-      "node_modules/trtc-electron-sdk/build/Release/trtc_electron_sdk.node"
-    ],
     "win": {
       "target": [
         "nsis",
@@ -48,8 +48,12 @@
     "mac": {
       "extraFiles": [
         {
-          "from": "node_modules/trtc-electron-sdk/build/Release/trtc_electron_sdk.node",
+          "from": "node_modules/trtc-electron-sdk/build/Release/${arch}/trtc_electron_sdk.node",
           "to": "./Resources"
+        },
+        {
+          "from": "node_modules/trtc-electron-sdk/build/mac-framework/${arch}/",
+          "to": "./Frameworks"
         }
       ]
     },
@@ -77,8 +81,8 @@
     "bootstrap-vue": "^2.12.0",
     "concurrently": "^5.2.0",
     "copy-webpack-plugin": "^5.1.1",
-    "electron": "^18.0.1",
-    "electron-builder": "^22.14.13",
+    "electron": "^18.3.12",
+    "electron-builder": "^23.3.3",
     "electron-node-loader": "^1.2.0",
     "eslint": "^6.8.0",
     "eslint-plugin-vue": "^6.1.2",
