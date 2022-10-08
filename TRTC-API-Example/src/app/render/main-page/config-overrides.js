@@ -37,16 +37,17 @@ module.exports = function override(config, env) {
       emit: true,
       // rewritePath: 'src/app/render/main-page/node_modules/trtc-electron-sdk/build/Release'
       rewritePath: process.env.NODE_ENV === 'production'
-        ? TARGET_PLATFORM === 'win32' 
+        ? TARGET_PLATFORM === 'win32'
           ? './resources/app.asar/node_modules/trtc-electron-sdk/build/Release'
           : '../Resources/app/node_modules/trtc-electron-sdk/build/Release'
         : 'src/app/render/main-page/node_modules/trtc-electron-sdk/build/Release'
     }
   });
 
-  // 不要采用 webpack 自动注入 mock process, 因为 electron_sdk 采用 process.platform, 自动注入会导致 process.platform undefined
-  // https://webpack.js.org/configuration/node/#node
-  config.node.process = false;
+  config.node = false;
+  config.externals = {
+    fs: "commonjs fs",
+  };
 
   if (isProduction) {
     config.devtool = false;

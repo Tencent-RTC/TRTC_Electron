@@ -1,9 +1,9 @@
-import { productName } from '../../package.json';
+import packageConfig from '../../package.json';
 
 const LOCAL_STORAGE_KEY = 'reportedEvents';
 
 class Monitor {
-  appName = productName;
+  appName = packageConfig.productName;
 
   uin = '';
 
