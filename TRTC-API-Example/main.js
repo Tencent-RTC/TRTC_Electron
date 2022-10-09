@@ -1,5 +1,28 @@
 const path = require('path');
-const { app, BrowserWindow, systemPreferences } = require('electron');
+const { app, BrowserWindow, systemPreferences, crashReporter } = require('electron');
+
+// 开启crash捕获
+crashReporter.start({
+  productName: 'trtc-electron-api-example',
+  companyName: 'Tencent Cloud',
+  submitURL: 'https://cloud.tencent.com',
+  uploadToServer: false,
+  ignoreSystemCrashHandler: false,
+});
+
+let crashFilePath = '';
+let crashDumpsDir = '';
+try {
+  // electron 低版本
+  crashFilePath = path.join(app.getPath('temp'), `${app.getName()} Crashes`);
+  console.log('————————crash path:', crashFilePath);
+
+  // electron 高版本
+  crashDumpsDir = app.getPath('crashDumps');
+  console.log('————————crashDumpsDir:', crashDumpsDir);
+} catch (e) {
+  console.error('获取奔溃文件路径失败', e);
+}
 
 let isDev = false;
 let debug = false;
@@ -65,6 +88,10 @@ function initialize() {
       require('devtron').install();
     }
 
+    mainWindow.webContents.on('did-finish-load', () => {
+      mainWindow.webContents.send('crash-file-path', `${crashFilePath}|${crashDumpsDir}`);
+    });
+
     mainWindow.on('closed', () => {
       mainWindow = null;
     });
@@ -85,6 +112,22 @@ function initialize() {
     if (process.platform !== 'darwin') {
       app.quit();
     }
+  });
+
+  app.on('gpu-process-crashed', (event, kill) => {
+    console.warn('app:gpu-process-crashed', kill);
+  });
+
+  app.on('renderer-process-crashed', (event, webContents, kill) => {
+    console.warn('app:renderer-process-crashed', kill);
+  });
+
+  app.on('render-process-gone', (event, webContents, details) => {
+    console.warn('app:render-process-gone', details);
+  });
+
+  app.on('child-process-gone', (event, details) => {
+    console.warn('app:child-process-gone', details);
   });
 }
 

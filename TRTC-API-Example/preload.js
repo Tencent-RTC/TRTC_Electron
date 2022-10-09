@@ -10,6 +10,11 @@ console.log(`process.platform: ${process.platform}`);
 const genTestUserSig = require('./assets/debug/gen-test-user-sig');
 const { ipcRenderer, shell } = require('electron');
 
+// 打印来自主进程的奔溃 dump 文件存放目录
+ipcRenderer.on('crash-file-path', (event, args) => {
+  console.warn('crash-file-path:', args);
+});
+
 window.ipcRenderer = ipcRenderer;
 window.shell = shell;
 window.genTestUserSig = genTestUserSig;
@@ -23,3 +28,9 @@ window.globalRoomId = window.parseInt(window.localStorage.getItem('roomId') || 0
  * This function is used be online example code.
  */
 window.a18n = keyString => keyString;
+
+// // crash test
+// setTimeout(() => {
+//   console.warn('---------------test crash');
+//   process.crash();
+// }, 10 * 1000);
