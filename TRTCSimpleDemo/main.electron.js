@@ -1,5 +1,38 @@
-const { app, BrowserWindow, systemPreferences } = require('electron');
+const { app, BrowserWindow, systemPreferences, crashReporter } = require('electron');
 const path = require('path');
+
+// 开启crash捕获
+crashReporter.start({
+  productName: 'trtc-electron-simple-demo',
+  companyName: 'Tencent',
+  submitURL: 'https://www.xxx.com',
+  uploadToServer: false,
+  ignoreSystemCrashHandler: false,
+});
+
+// 开启crash捕获
+let crashFilePath = '';
+let crashDumpsDir = '';
+try {
+  // electron 低版本
+  crashFilePath = path.join(app.getPath('temp'), app.getName() + ' Crashes');
+  console.log('————————crash path:', crashFilePath); 
+
+  // electron 高版本
+  crashDumpsDir = app.getPath('crashDumps');
+  console.log('————————crashDumpsDir:', crashDumpsDir);
+} catch (e) {
+  console.error('获取奔溃文件路径失败', e);
+}
+
+let win = null;
+
+function logBothProcess(msg) {
+  console.log(msg);
+  if(win && win.webContents) {
+    win.webContents.executeJavaScript(`console.log("${msg.toString()}")`);
+  }
+}
 
 function getParam() {
   const param = {
@@ -54,7 +87,7 @@ async function checkAndApplyDeviceAccessPrivilege() {
 async function createWindow() {
   await checkAndApplyDeviceAccessPrivilege();
   // 创建浏览器窗口
-  const win = new BrowserWindow({
+  win = new BrowserWindow({
     width: 1366,
     height: 1024,
     minWidth: 800,
@@ -63,6 +96,7 @@ async function createWindow() {
       preload: path.join(__dirname, 'preload.electron.js'),
       nodeIntegration: true,
       contextIsolation: false,
+      nodeIntegrationInWorker: true,
     },
   });
 
@@ -73,7 +107,13 @@ async function createWindow() {
      setTimeout(()=>{
       win.reload();
      }, 1000);
+     logBothProcess('did-fail-load occur')
   });
+
+  win.webContents.on('did-finish-load', function(){
+    win.webContents.send('crash-file-path', `${crashFilePath}|${crashDumpsDir}`);
+  });
+
   if (param.TRTC_ENV === 'production') {
     win.loadFile('dist/index.html');
   } else {

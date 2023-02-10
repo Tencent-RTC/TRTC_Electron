@@ -350,7 +350,14 @@ export default {
       rect.width = 0;
       rect.height = 0;
       trtcCloud.selectScreenCaptureTarget(source.type, source.sourceId, source.sourceName, rect, true, true);
-      trtcCloud.startScreenCapture()
+      trtcCloud.startScreenCapture(null, TRTCVideoStreamType.TRTCVideoStreamTypeSub, new TRTCVideoEncParam(
+        TRTCVideoResolution.TRTCVideoResolution_1920_1080,
+        TRTCVideoResolutionMode.TRTCVideoResolutionModeLandscape,
+        24,
+        1600,
+        200,
+        true
+      ));
     },
 
     stopScreenShare(){
@@ -407,7 +414,11 @@ export default {
           variant: 'warning',
           solid: true
       });
-    }
+    },
+    onSnapshotComplete(userId, streamType, imageData, width, height) {
+      logger.log(`onSnapshotComplete:userId: ${userId}, type: ${streamType} width: ${width}, height: ${height}`);
+      logger.log('onSnapshotComplete:imageData:', imageData);
+    },
 
   },
 
@@ -451,6 +462,7 @@ export default {
     trtcCloud.on('onRemoteUserEnterRoom', this.onRemoteUserEnterRoom.bind(this));
     trtcCloud.on('onRemoteUserLeaveRoom', this.onRemoteUserLeaveRoom.bind(this));
     trtcCloud.on('onUserSubStreamAvailable', this.onUserSubStreamAvailable.bind(this));
+    trtcCloud.on('onSnapshotComplete', this.onSnapshotComplete.bind(this));
     logger.log(`mounted, setCurrentCameraDevice('${this.cameraId}')`);
     trtcCloud.setCurrentCameraDevice(this.cameraId);
     // 5. 设置编码参数
@@ -472,8 +484,9 @@ export default {
      *【特别说明】如果 videoResolution 指定分辨率 640 × 360，resMode 指定模式为 Portrait，则最终编码出的分辨率为360 × 640。
      */
     encParam.resMode = TRTCVideoResolutionMode.TRTCVideoResolutionModeLandscape;
-    encParam.videoFps = 25;
+    encParam.videoFps = 24;
     encParam.videoBitrate = 600;
+    encParam.minVideoBitrate = 200;
     encParam.enableAdjustRes = true;
     trtcCloud.setVideoEncoderParam(encParam)
 
@@ -495,6 +508,8 @@ export default {
      * TRTCAppScene.TRTCAppSceneVideoCall: 视频通话场景，适合[1对1视频通话]、[300人视频会议]、[在线问诊]、[视频聊天]、[远程面试]等。
      */
     trtcCloud.enterRoom(param, TRTCAppScene.TRTCAppSceneVideoCall);
+    // trtcCloud.setExternalRenderEnabled(true);
+    // trtcCloud.enableSmallVideoStream(true, encParam); // 开启双路编码
     window.appMonitor?.reportEvent('EnterVideoRoom', 'success');
     
     // 挂到 windows BOM 下，方便调试。
