@@ -59,6 +59,8 @@
     "@babel/core": "^7.14.6",
     "json-excel-cli": "^1.0.17",
     "native-ext-loader": "^2.3.0",
-    "react-app-rewired": "^2.1.8"
+    "react-app-rewired": "^2.1.8",
+    "json5": "^2.2.3",
+    "loader-utils": "^2.0.4"
   }
 }
