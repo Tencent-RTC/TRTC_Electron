@@ -23,6 +23,7 @@ export default function ConfirmDialog() {
     Modal.confirm = (confirmProps) => {
       addConfirm(confirmProps);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const addConfirm = (confirmProps) => {
