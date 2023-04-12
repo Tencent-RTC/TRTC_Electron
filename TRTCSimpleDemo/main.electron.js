@@ -121,4 +121,21 @@ async function createWindow() {
   }
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  if (!app.isPackaged) {
+    console.log('Added Extension: installing vue-dev tool...');
+    const { default: installExtension, VUEJS_DEVTOOLS } = require('electron-devtools-installer');
+    installExtension(VUEJS_DEVTOOLS)
+    .then((name) => {
+      console.log(`Added Extension:  ${name}`);
+      createWindow();
+    })
+    .catch((err) => {
+      console.error('Added Extension failed: ', err);
+      createWindow();
+    });
+  } else {
+    console.log('Packaged env, create window without dev-tool extension.');
+    createWindow();
+  }
+});

@@ -67,7 +67,7 @@
     "axios": "^0.21.1",
     "bootstrap-icons": "^1.0.0-alpha3",
     "core-js": "^3.6.4",
-    "trtc-electron-sdk": "^10.7.404",
+    "trtc-electron-sdk": "^10.9.405-beta.0",
     "vue": "^2.6.11",
     "vue-router": "^3.1.6"
   },
@@ -83,6 +83,7 @@
     "copy-webpack-plugin": "^5.1.1",
     "electron": "^18.3.12",
     "electron-builder": "^23.3.3",
+    "electron-devtools-installer": "^3.2.0",
     "electron-node-loader": "^1.2.0",
     "eslint": "^6.8.0",
     "eslint-plugin-vue": "^6.1.2",
