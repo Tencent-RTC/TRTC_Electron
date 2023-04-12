@@ -5,8 +5,6 @@
         </div>
         <div v-for="item in list" :key="item.sourceId" :label="item.sourceName" class="screen-info"  
             v-bind:data-id="item.sourceId"
-            v-bind:data-name="item.sourceName"
-            v-bind:data-type="item.type"
             @click="onChoose">
             <canvas :id="['screen_'+item.sourceId]" @onload="onCanvasLoaded"></canvas>
             <p>

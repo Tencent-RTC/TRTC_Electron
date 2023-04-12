@@ -60,6 +60,7 @@ import {
   TRTCVideoResolutionMode,
   TRTCBeautyStyle,
   Rect,
+  TRTCScreenCaptureProperty
 } from "trtc-electron-sdk/liteav/trtc_define";
 import {BDVideoEncode, BDBeauty} from '../../common/bd-tools';
 let trtcCloud = null; // 用于TRTCQcloud 实例， mounted 时实体化
@@ -322,8 +323,8 @@ export default {
       clearTimeout(this.getScreensTaskID);
       let my = this;
       this.getScreensTaskID = setTimeout(()=>{
-        logger.log('getScreensList');
         my.screensList = trtcCloud.getScreenCaptureSources(200, 160, 0, 0);
+        console.warn('getScreensList:', my.screensList);
         my.screensListVisiable = true;
       }, 200);
     },
@@ -332,24 +333,44 @@ export default {
      * 当在 show-screen-capture 组件中选择了一个窗口快照后触发，这里会开始屏幕分享
      */
     chooseWindowCapture(event) {
-      let source = {
-        sourceId: event.currentTarget.dataset.id,
-        sourceName: event.currentTarget.dataset.name,
-        type: parseInt(event.currentTarget.dataset.type),
-      };
-      logger.log('chooseWindowCapture', source);
-      this.startScreenShare(source);
-      this.screensListVisiable = false;
-      this.isScreenSharing = true;
+      const sourceId = event.currentTarget.dataset.id;
+
+      const source = this.screensList.filter(item => item.sourceId === sourceId)[0];
+      if (source) {
+        logger.log('chooseWindowCapture', source);
+        this.startScreenShare(source);
+        this.screensListVisiable = false;
+        this.isScreenSharing = true;
+      } else {
+        const errMsg = `无效的屏幕或窗口ID ${sourceId}`;
+        console.log(errMsg);
+        this.logger.errMsg(errMsg);
+      }
+      
     },
 
     startScreenShare(source) {
-      let rect = new Rect();
-      rect.top = 0;
-      rect.left = 0;
-      rect.width = 0;
-      rect.height = 0;
-      trtcCloud.selectScreenCaptureTarget(source.type, source.sourceId, source.sourceName, rect, true, true);
+      const rect = new Rect(0, 0, 0, 0);
+      // eslint-disable-next-line no-unused-vars
+      const captureProperty = new TRTCScreenCaptureProperty(
+        true, // enable capture mouse
+        true, // enable highlight
+        true, // enable high performance
+        0, // default highlight color
+        8, // highlight width
+        true // disable capture child window
+      );
+      // 方式一
+      trtcCloud.selectScreenCaptureTarget(source, rect, captureProperty);
+      // // 方式二
+      // trtcCloud.selectScreenCaptureTarget(
+      //   source.type, 
+      //   source.sourceId, 
+      //   source.sourceName, 
+      //   rect, 
+      //   true, 
+      //   true
+      // );
       trtcCloud.startScreenCapture(null, TRTCVideoStreamType.TRTCVideoStreamTypeSub, new TRTCVideoEncParam(
         TRTCVideoResolution.TRTCVideoResolution_1920_1080,
         TRTCVideoResolutionMode.TRTCVideoResolutionModeLandscape,
@@ -508,8 +529,6 @@ export default {
      * TRTCAppScene.TRTCAppSceneVideoCall: 视频通话场景，适合[1对1视频通话]、[300人视频会议]、[在线问诊]、[视频聊天]、[远程面试]等。
      */
     trtcCloud.enterRoom(param, TRTCAppScene.TRTCAppSceneVideoCall);
-    // trtcCloud.setExternalRenderEnabled(true);
-    // trtcCloud.enableSmallVideoStream(true, encParam); // 开启双路编码
     window.appMonitor?.reportEvent('EnterVideoRoom', 'success');
     
     // 挂到 windows BOM 下，方便调试。
