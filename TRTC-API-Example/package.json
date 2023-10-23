@@ -18,7 +18,7 @@
   "license": "ISC",
   "dependencies": {
     "http-cache-semantics": "^4.1.1",
-    "trtc-electron-sdk": "^10.6.403"
+    "trtc-electron-sdk": "^11.4.502"
   },
   "devDependencies": {
     "@babel/core": "^7.14.6",
