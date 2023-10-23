@@ -24,7 +24,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^5.0.1",
     "sass": "^1.32.12",
-    "trtc-electron-sdk": "^10.6.403",
+    "trtc-electron-sdk": "^11.4.502",
     "typescript": "^4.2.4",
     "web-vitals": "^1.0.1"
   },
