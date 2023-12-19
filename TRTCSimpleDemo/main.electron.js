@@ -1,6 +1,15 @@
 const { app, BrowserWindow, systemPreferences, crashReporter } = require('electron');
 const path = require('path');
 
+/**
+ * Linux 下构建安装包，运行时默认路径是 /User/<用户名> 路径，通过下面几行代码判断，
+ * 强制切换到应用安装目录，否则会因找不到 resources 目录，进而导致找不到 .node 文件。
+ */
+if (app.isPackaged && process.platform === 'linux') {
+  process.chdir(process.resourcesPath);
+  process.chdir('..');
+}
+
 // 开启crash捕获
 crashReporter.start({
   productName: 'trtc-electron-simple-demo',
@@ -38,7 +47,6 @@ function getParam() {
   const param = {
     BIN_PATH: '',
     APP_PATH: '',
-    TRTC_ENV: 'production',
   };
   const tmp = Array.from(process.argv);
   param.BIN_PATH = tmp[0];
@@ -85,7 +93,9 @@ async function checkAndApplyDeviceAccessPrivilege() {
 }
 
 async function createWindow() {
-  await checkAndApplyDeviceAccessPrivilege();
+  if (process.platform === "darwin") {
+    await checkAndApplyDeviceAccessPrivilege();
+  }
   // 创建浏览器窗口
   win = new BrowserWindow({
     width: 1366,
@@ -103,7 +113,7 @@ async function createWindow() {
   // 在执行 npm run start 后，经常会窗口已经显示出来了，但代码还未构建好，
   // 此时捕获到 did-fail-load 事件，在之后延迟重载
   win.webContents.on('did-fail-load', function () {
-     console.log(`createWindow: did-fail-load, reload ${param.TRTC_ENV} soon...`);
+     console.log(`createWindow: did-fail-load, reload ${app.isPackaged ? "production" : "development"} soon...`);
      setTimeout(()=>{
       win.reload();
      }, 1000);
@@ -114,7 +124,7 @@ async function createWindow() {
     win.webContents.send('crash-file-path', `${crashFilePath}|${crashDumpsDir}`);
   });
 
-  if (param.TRTC_ENV === 'production') {
+  if (app.isPackaged) {
     win.loadFile('dist/index.html');
   } else {
     win.loadURL(gerServer());

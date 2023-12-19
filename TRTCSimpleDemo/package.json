@@ -1,25 +1,37 @@
 {
   "name": "trtc-electron-simple-demo",
   "productName": "trtcElectronSimpleExternal",
-  "version": "0.1.1",
+  "version": "1.0.6",
   "private": true,
   "main": "main.electron.js",
+  "author": {
+    "name": "Tencent Cloud TRTC Team",
+    "email": "zackshi@tencent.com",
+    "url": "https://www.tencentcloud.com/products/trtc"
+  },
+  "homepage": "https://github.com/LiteAVSDK/TRTC_Electron/tree/main/TRTCSimpleDemo",
   "scripts": {
-    "watch": "vue-cli-service build --watch --trtc_env=development",
-    "build:mac": "vue-cli-service build --trtc_env=production --target_platform=darwin",
-    "build:win": "vue-cli-service build --trtc_env=production --target_platform=win32",
-    "start": "concurrently \"npm run serve\" \"npm run electron \"",
     "serve": "vue-cli-service serve",
     "lint": "vue-cli-service lint",
-    "electron": "electron . --trtc_env=development",
+    "watch": "vue-cli-service build --watch",
+    "build:mac": "vue-cli-service build --target_platform=darwin",
+    "build:win": "vue-cli-service build --target_platform=win32",
+    "build:linux": "vue-cli-service build --target_platform=linux",
+    "start": "concurrently \"npm run serve\" \"npm run electron \"",
+    "start:linux": "export  LD_LIBRARY_PATH=./node_modules/trtc-electron-sdk/build/Release:$LD_LIBRARY_PATH && sudo  ldconfig && npm run start",
+    "electron": "electron .",
     "compile:mac": "electron-builder --mac",
     "compile:mac-universal": "electron-builder --mac --universal",
     "compile:win64": "electron-builder --win --x64",
     "compile:win32": "electron-builder --win --ia32",
+    "compile:linux-x64": "electron-builder --linux --x64",
+    "compile:linux-arm64": "electron-builder --linux --arm64",
     "pack:mac": "npm run build:mac && npm run compile:mac",
     "pack:mac-universal": "npm run build:mac && npm run compile:mac-universal",
     "pack:win64": "npm run build:win && npm run compile:win64",
-    "pack:win32": "npm run build:win && npm run compile:win32"
+    "pack:win32": "npm run build:win && npm run compile:win32",
+    "pack:linux-x64": "npm run build:linux && npm run compile:linux-x64",
+    "pack:linux-arm64": "npm run build:linux && npm run compile:linux-arm64"
   },
   "build": {
     "asar": true,
@@ -57,6 +69,33 @@
         }
       ]
     },
+    "linux": {
+      "artifactName": "${productName}_${version}.${ext}",
+      "target": [
+        "zip",
+        "AppImage",
+        "deb"
+      ],
+      "category": "AudioVideo",
+      "extraFiles": [
+        {
+          "from": "node_modules/trtc-electron-sdk/build/Release/${arch}/trtc_electron_sdk.node",
+          "to": "./resources"
+        },
+        {
+          "from": "node_modules/trtc-electron-sdk/build/Release/${arch}/libliteavsdk.so",
+          "to": "./"
+        },
+        {
+          "from": "node_modules/trtc-electron-sdk/build/Release/${arch}/libtxffmpeg.so",
+          "to": "./"
+        },
+        {
+          "from": "node_modules/trtc-electron-sdk/build/Release/${arch}/libuser_sig_gen.so",
+          "to": "./"
+        }
+      ]
+    },
     "files": [
       "dist/**/*",
       "*.js",
@@ -67,7 +106,7 @@
     "axios": "^0.21.1",
     "bootstrap-icons": "^1.0.0-alpha3",
     "core-js": "^3.6.4",
-    "trtc-electron-sdk": "^10.9.405-beta.0",
+    "trtc-electron-sdk": "^11.4.503",
     "vue": "^2.6.11",
     "vue-router": "^3.1.6"
   },
