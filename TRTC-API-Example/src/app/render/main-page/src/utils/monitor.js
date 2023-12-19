@@ -16,7 +16,16 @@ class Monitor {
   reportedEventMap = {};
 
   constructor(options) {
-    this.aegis = window.aegis;
+    // eslint-disable-next-line no-undef
+    this.aegis = new Aegis({
+      id: 'iHWefAYqKIeUpzdnEB', // 项目key
+      uin: '', // 用户唯一 ID（可选）
+      spa: true, // 是否单页面应用
+      reportApiSpeed: true, // 接口测速
+      reportAssetSpeed: true, // 静态资源测速
+      pagePerformance: true, // 开启页面测速
+    });
+    
     if (options) {
       const { sdkAppId, uin } = options;
       this.sdkAppId = sdkAppId || 0;
