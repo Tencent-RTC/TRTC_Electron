@@ -7,6 +7,7 @@
     TRTCVideoStreamType,
     TRTCTranscodingConfig,
     TRTCTranscodingConfigMode,
+    TRTCMixInputType,
   } = require('trtc-electron-sdk');
 
   const userId = '' || window.globalUserId;
@@ -73,6 +74,9 @@
         zOrder: 2,
         pureAudio: false,
         streamType: TRTCVideoStreamType.TRTCVideoStreamTypeBig,
+        inputType: TRTCMixInputType.TRTCMixInputTypeAudioVideo,
+        renderMode: 0,
+        image: '',
       },
       {
         userId: '$PLACE_HOLDER_LOCAL_SUB$',
@@ -86,6 +90,9 @@
         zOrder: 1,
         pureAudio: false,
         streamType: TRTCVideoStreamType.TRTCVideoStreamTypeSub,
+        inputType: TRTCMixInputType.TRTCMixInputTypePureVideo,
+        renderMode: 1,
+        image: '',
       },
       {
         userId: '$PLACE_HOLDER_REMOTE$',
@@ -99,6 +106,9 @@
         zOrder: 3,
         pureAudio: false,
         streamType: TRTCVideoStreamType.TRTCVideoStreamTypeBig,
+        inputType: TRTCMixInputType.TRTCMixInputTypeAudioVideo,
+        renderMode: 2,
+        image: '',
       },
       {
         userId: '$PLACE_HOLDER_REMOTE$',
@@ -112,6 +122,9 @@
         zOrder: 4,
         pureAudio: false,
         streamType: TRTCVideoStreamType.TRTCVideoStreamTypeBig,
+        inputType: TRTCMixInputType.TRTCMixInputTypeAudioVideo,
+        renderMode: 0,
+        image: '',
       },
       {
         userId: '$PLACE_HOLDER_REMOTE$',
@@ -125,6 +138,9 @@
         zOrder: 5,
         pureAudio: false,
         streamType: TRTCVideoStreamType.TRTCVideoStreamTypeBig,
+        inputType: TRTCMixInputType.TRTCMixInputTypeAudioVideo,
+        renderMode: 1,
+        image: '',
       },
       {
         userId: '$PLACE_HOLDER_REMOTE$',
@@ -138,6 +154,9 @@
         zOrder: 15,
         pureAudio: false,
         streamType: TRTCVideoStreamType.TRTCVideoStreamTypeBig,
+        inputType: TRTCMixInputType.TRTCMixInputTypeAudioVideo,
+        renderMode: 2,
+        image: '',
       },
     ];
     console.log('mix video stream config:', JSON.stringify(mixConfig));
