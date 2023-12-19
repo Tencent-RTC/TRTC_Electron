@@ -22,19 +22,39 @@ function getArgvToObject() {
 
 let param = getArgvToObject();
 
-if (!param.TRTC_ENV) {
-  param.TRTC_ENV = 'development'
-}
+const targetPlatform = (function(){
+  let target = os.platform();
+  for (let i=0; i<process.argv.length; i++) {
+    if (process.argv[i].includes('--target_platform=')) {
+      target = process.argv[i].replace('--target_platform=', '');
+      break;
+    }
+  }
+  if (!['win32', 'darwin', 'linux'].includes(target)) target = os.platform();
+  return target;
+})();
 
-if ( !param.TRTC_ENV || !['production', 'development'].includes(param.TRTC_ENV)) {
-  console.log('TRTC_ENV set default: development');
-  param.TRTC_ENV = 'development'
-}
+console.log('targetPlatform', targetPlatform);
 
-if (!param.TARGET_PLATFORM || !['darwin', 'win32'].includes(param.TARGET_PLATFORM)) {
-  console.log(`TARGET_PLATFORM set default: ${os.platform()}`);
-  param.TARGET_PLATFORM = os.platform();
-}
+const getRewritePath = function() {
+  let rewritePath = '';
+  if (process.env.NODE_ENV === 'production') {
+    switch (targetPlatform) {
+      case 'win32':
+        rewritePath = './resources';
+        break;
+      case 'darwin':
+        rewritePath = '../Resources';
+        break;
+      case 'linux':
+        rewritePath = './resources';
+        break;
+    }
+  } else if (process.env.NODE_ENV === 'development') {
+    rewritePath = 'node_modules/trtc-electron-sdk/build/Release';
+  }
+  return rewritePath;
+};
 
 console.log('param:', param);
 
@@ -49,9 +69,7 @@ let vueCliConfig = {
           loader: 'native-ext-loader',
           options: {
               emit: true,
-              rewritePath: param.TRTC_ENV === 'production'
-              ? param.TARGET_PLATFORM === 'win32' ? './resources' : '../Resources'
-              : './node_modules/trtc-electron-sdk/build/Release'
+              rewritePath: getRewritePath()
           }
         }
       ],
