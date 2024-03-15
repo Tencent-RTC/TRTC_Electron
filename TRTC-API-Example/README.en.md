@@ -56,13 +56,13 @@ You have [signed up for a Tencent Cloud account](https://intl.cloud.tencent.com/
 1. Find and open the `assets/debug/gen-test-user-sig.js` file.
 2. Set parameters in `gen-test-user-sig.js` as follows:
   <ul><li>SDKAPPID: `0` by default. Set it to the actual `SDKAppID`.</li>
-  <li>SECRETKEY: Left empty by default. Set it to the actual key.</li></ul>
+  <li>SDKSECRETKEY: Left empty by default. Set it to the actual key.</li></ul>
 3. Return to the TRTC console and click **Pasted and Next**.
 4. Click **Return to Overview Page**.
 5. Set `window.globalUserId` and `window.globalRoomId` in the `preload.js` file, which will take effect in all API Examples.
 
 > ⚠️Note:
-> In this document, the method to obtain UserSig is to configure a SECRETKEY in the client code. In this method, the SECRETKEY is vulnerable to decompilation and reverse engineering. Once your SECRETKEY is leaked, attackers can steal your Tencent Cloud traffic. Therefore, **this method is only suitable for locally running a demo project and feature debugging**.
+> In this document, the method to obtain UserSig is to configure a SDKSECRETKEY in the client code. In this method, the SDKSECRETKEY is vulnerable to decompilation and reverse engineering. Once your SDKSECRETKEY is leaked, attackers can steal your Tencent Cloud traffic. Therefore, **this method is only suitable for locally running a demo project and feature debugging**.
 >
 > The correct `UserSig` distribution method is to integrate the calculation code of `UserSig` into your server and provide an application-oriented API. When `UserSig` is needed, your application can send a request to the business server for a dynamic `UserSig`. For more information, see [How do I calculate `UserSig` during production?](https://intl.cloud.tencent.com/document/product/647/35166).
 
