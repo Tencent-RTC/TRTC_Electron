@@ -191,5 +191,5 @@
   "观众(音视频不上传)": "观众(音视频不上传)",
   "本地屏幕分享预览区": "本地屏幕分享预览区",
   "远程屏幕分享预览区": "远程屏幕分享预览区",
-  "请先配置好您的账号信息： SDKAPPID 及 SECRETKEY，配置文件位置：assets/debug/gen-test-user-sig.js": "请先配置好您的账号信息： SDKAPPID 及 SECRETKEY，配置文件位置：assets/debug/gen-test-user-sig.js"
+  "请先配置好您的账号信息： SDKAPPID 及 SDKSECRETKEY，配置文件位置：assets/debug/gen-test-user-sig.js": "请先配置好您的账号信息： SDKAPPID 及 SDKSECRETKEY，配置文件位置：assets/debug/gen-test-user-sig.js"
 }

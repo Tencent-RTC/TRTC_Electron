@@ -32,12 +32,12 @@ You have [signed up for a Tencent Cloud account](https://intl.cloud.tencent.com/
 3. Set parameters in `gen-test-user-sig.js` as follows:
 
     -   `SDKAPPID`: Set it to the `SDKAppID` obtained in [step 2](#idandkey).
-    -   `SECRETKEY`: Set it to the key obtained in [step 2](#idandkey).
+    -   `SDKSECRETKEY`: Set it to the key obtained in [step 2](#idandkey).
     
     
     
     >!
-    >In this document, the `SECRETKEY` is configured in the client code to obtain `UserSig`. The `SECRETKEY` is easily decompiled and reverse cracked. If the `SECRETKEY` is leaked, hackers can steal your Tencent Cloud traffic. Therefore, **this method only applies to locally running a demo project and commissioning features**.
+    >In this document, the `SDKSECRETKEY` is configured in the client code to obtain `UserSig`. The `SDKSECRETKEY` is easily decompiled and reverse cracked. If the `SDKSECRETKEY` is leaked, hackers can steal your Tencent Cloud traffic. Therefore, **this method only applies to locally running a demo project and commissioning features**.
     > For the correct UserSig generating method, see [How do I calculate `UserSig` during production?](https://intl.cloud.tencent.com/document/product/647/35166).
     
     

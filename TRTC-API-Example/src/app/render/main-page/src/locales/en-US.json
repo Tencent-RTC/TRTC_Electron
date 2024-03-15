@@ -191,5 +191,5 @@
   "观众(音视频不上传)": "Audience(No Video & Audio Uploaded)",
   "本地屏幕分享预览区": "Local screen sharing preview area",
   "远程屏幕分享预览区": "Remote screen sharing preview area",
-  "请先配置好您的账号信息： SDKAPPID 及 SECRETKEY，配置文件位置：assets/debug/gen-test-user-sig.js": "Please config your account information: SDKAPPID and SECRETKEY，configuration path：assets/debug/gen-test-user-sig.js"
+  "请先配置好您的账号信息： SDKAPPID 及 SDKSECRETKEY，配置文件位置：assets/debug/gen-test-user-sig.js": "Please config your account information: SDKAPPID and SDKSECRETKEY，configuration path：assets/debug/gen-test-user-sig.js"
 }
