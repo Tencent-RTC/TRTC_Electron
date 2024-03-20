@@ -33,12 +33,12 @@ _[English](README.en.md) | 简体中文_
 3.  设置 `gen-test-user-sig.js` 文件中的相关参数：
 
     -   SDKAPPID：替换该变量值为[步骤2](#idandkey)中在页面上看到的 SDKAppID。
-    -   SDKSECRETKEY：替换该变量值为[步骤2](#idandkey)中在页面上看到的密钥。
+    -   SECRETKEY：替换该变量值为[步骤2](#idandkey)中在页面上看到的密钥。
     
     
     
     >!
-    >本文提到的生成 UserSig 的方案是在客户端代码中配置 SDKSECRETKEY，该方法中 SDKSECRETKEY 很容易被反编译逆向破解，一旦您的密钥泄露，攻击者就可以盗用您的腾讯云流量，因此**该方法仅适合本地跑通 Demo 和功能调试**。
+    >本文提到的生成 UserSig 的方案是在客户端代码中配置 SECRETKEY，该方法中 SECRETKEY 很容易被反编译逆向破解，一旦您的密钥泄露，攻击者就可以盗用您的腾讯云流量，因此**该方法仅适合本地跑通 Demo 和功能调试**。
     >正确的 UserSig 签发方式请参见 [服务端生成 UserSig](https://cloud.tencent.com/document/product/647/17275#Server)。
     
     

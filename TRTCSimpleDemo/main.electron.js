@@ -1,4 +1,4 @@
-const { app, BrowserWindow, systemPreferences, crashReporter } = require('electron');
+const { app, BrowserWindow, systemPreferences, crashReporter, ipcMain } = require('electron');
 const path = require('path');
 
 /**
@@ -120,8 +120,40 @@ async function createWindow() {
      logBothProcess('did-fail-load occur')
   });
 
+  win.webContents.on("did-start-loading", () => {
+    win.webContents.send("app-path", app.getAppPath());
+    win.webContents.send(
+      "crash-file-path",
+      `did-start-loading: ${crashFilePath}|${crashDumpsDir}`
+    );
+  });
+
+  win.webContents.on("did-stop-loading", () => {
+    win.webContents.send("app-path", app.getAppPath());
+    win.webContents.send(
+      "crash-file-path",
+      `did-stop-loading: ${crashFilePath}|${crashDumpsDir}`
+    );
+  });
+
   win.webContents.on('did-finish-load', function(){
-    win.webContents.send('crash-file-path', `${crashFilePath}|${crashDumpsDir}`);
+    win.webContents.send("app-path", app.getAppPath());
+    win.webContents.send(
+      "crash-file-path",
+      `did-finish-load: ${crashFilePath}|${crashDumpsDir}`
+    );
+  });
+
+  win.webContents.on("dom-ready", () => {
+    win.webContents.send("app-path", app.getAppPath());
+    win.webContents.send(
+      "crash-file-path",
+      `dom-ready: ${crashFilePath}|${crashDumpsDir}`
+    );
+  });
+
+  ipcMain.handle("app-path", () => {
+    return app.getAppPath();
   });
 
   if (app.isPackaged) {
@@ -134,16 +166,19 @@ async function createWindow() {
 app.whenReady().then(() => {
   if (!app.isPackaged) {
     console.log('Added Extension: installing vue-dev tool...');
-    const { default: installExtension, VUEJS_DEVTOOLS } = require('electron-devtools-installer');
+    const {
+      default: installExtension,
+      VUEJS_DEVTOOLS,
+    } = require('electron-devtools-installer');
     installExtension(VUEJS_DEVTOOLS)
-    .then((name) => {
-      console.log(`Added Extension:  ${name}`);
-      createWindow();
-    })
-    .catch((err) => {
-      console.error('Added Extension failed: ', err);
-      createWindow();
-    });
+      .then((name) => {
+        console.log(`Added Extension:  ${name}`);
+        createWindow();
+      })
+      .catch((err) => {
+        console.error('Added Extension failed: ', err);
+        createWindow();
+      });
   } else {
     console.log('Packaged env, create window without dev-tool extension.');
     createWindow();

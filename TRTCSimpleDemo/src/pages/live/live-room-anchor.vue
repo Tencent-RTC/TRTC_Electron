@@ -588,7 +588,7 @@ export default {
     this.sdkInfo = genTestUserSig(this.userId);
 
     // 3. 实例化一个 TRTCCloud （包装了 TRTCCloud的类）
-    trtcCloud = new TRTCCloud();
+    trtcCloud = TRTCCloud.getTRTCShareInstance();
     logger.warn(`sdk version: ${trtcCloud.getSDKVersion()}`);
 
     // 4. 配置基本的事件订阅

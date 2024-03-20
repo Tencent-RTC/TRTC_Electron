@@ -25,6 +25,12 @@
           <b-icon icon="tv-fill" color="white" v-else></b-icon>
         </b-iconstack>
       </b-button>
+      <b-button variant="link">
+        <b-iconstack font-scale="1" @click="toggleEncrypting">
+          <b-icon icon="lock" color="yellow" v-if="isEncryptEnabled"></b-icon>
+          <b-icon icon="unlock" color="white" v-else></b-icon>
+        </b-iconstack>
+      </b-button>
 
       <b-button variant="link" @click="exitRoom">
         <b-iconstack font-scale="1">
@@ -44,13 +50,7 @@
 </template>
 
 <script>
-import TRTCCloud from 'trtc-electron-sdk';
-import showScreenCpature from '../../components/show-screen-capture.vue';
-import genTestUserSig from '../../debug/gen-test-user-sig';
-import trtcState from '../../common/trtc-state';
-import Log from '../../common/log';
-const logger = new Log(`trtcRoom`);
-import {
+import TRTCCloud, {
   TRTCAppScene, 
   TRTCVideoStreamType, 
   TRTCVideoFillMode, 
@@ -60,10 +60,19 @@ import {
   TRTCVideoResolutionMode,
   TRTCBeautyStyle,
   Rect,
-  TRTCScreenCaptureProperty
-} from "trtc-electron-sdk/liteav/trtc_define";
+  TRTCScreenCaptureProperty,
+  TRTCPluginType
+} from 'trtc-electron-sdk';
+import showScreenCpature from '../../components/show-screen-capture.vue';
+import genTestUserSig from '../../debug/gen-test-user-sig';
+import trtcState from '../../common/trtc-state';
+import Log from '../../common/log';
 import {BDVideoEncode, BDBeauty} from '../../common/bd-tools';
+
+const logger = new Log(`trtcRoom`);
+
 let trtcCloud = null; // 用于TRTCQcloud 实例， mounted 时实体化
+let encryptPlugin = null; // 自定义加解密插件
 export default {
   components: {
     'show-screen-capture': showScreenCpature
@@ -78,6 +87,7 @@ export default {
       isMuteMic: false,
       isDisableCamara : false,
       isScreenSharing: false,
+      isEncryptEnabled: false,
       getScreensTaskID: 0,
       screensList: [],
       screensListVisiable: false,
@@ -315,6 +325,49 @@ export default {
       this.stopScreenShare();
     },
 
+    /**
+     * 开启 / 关闭自定义加解密
+     */
+    toggleEncrypting() {
+      if (!this.isEncryptEnabled) {
+        // 开启自定义加解密
+        trtcCloud.setPluginParams(TRTCPluginType.TRTCPluginTypeMediaEncryptDecrypt, {enable: true});
+        trtcCloud.setPluginCallback((pluginId, errorCode, msg) => {
+          console.log(`plugin callback: ${pluginId}, errorCode: ${errorCode}, msg: ${msg}`);
+        });
+        let libPath= '';
+        if (process.platform === 'win32') {
+          if (process.arch === "x64") {
+            libPath = window.path.resolve(window.APP_PATH, 'plugin/encrypt/win/x64/MediaEncryptDecryptPlugin.dll');
+          } else {
+            libPath = window.path.resolve(window.APP_PATH, 'plugin/encrypt/win/ia32/MediaEncryptDecryptPlugin.dll');
+          }
+        } else {
+          libPath = window.path.resolve(window.APP_PATH, 'plugin/encrypt/mac/MediaEncryptDecryptPlugin.dylib');
+        }
+        encryptPlugin = trtcCloud.addPlugin({
+          id: 'encrypt',
+          path: libPath,
+          type: TRTCPluginType.TRTCPluginTypeMediaEncryptDecrypt,
+        });
+        encryptPlugin.enable();
+        window._encryptPlugin = encryptPlugin;
+        
+        this.isEncryptEnabled = true;
+      } else {
+        // 关闭自定义加解密
+        if (encryptPlugin) {
+          encryptPlugin.disable();
+          trtcCloud.removePlugin(encryptPlugin.id);
+          encryptPlugin = null;
+          window._encryptPlugin =undefined;
+        }
+        trtcCloud.setPluginParams(TRTCPluginType.TRTCPluginTypeMediaEncryptDecrypt, {enable: false});
+        
+        this.isEncryptEnabled = false;
+      }
+    },
+
     /** 
      * 获取窗口列表，用于屏幕分享
      */
@@ -470,7 +523,7 @@ export default {
     this.sdkInfo = genTestUserSig(this.userId);
 
     // 3. 实例化一个 trtc-electron-sdk
-    trtcCloud = new TRTCCloud();
+    trtcCloud = TRTCCloud.getTRTCShareInstance();
     logger.warn(`sdk version: ${trtcCloud.getSDKVersion()}`);
 
     // 4. 配置基本的事件订阅
