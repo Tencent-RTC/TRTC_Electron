@@ -1,6 +1,6 @@
 import TRTCCloud from 'trtc-electron-sdk';
 import Log from './log';
-const trtcCloud = new TRTCCloud();
+const trtcCloud = TRTCCloud.getTRTCShareInstance();
 const logger = new Log('TRTCState');
 class TRTCState {
   constructor() {

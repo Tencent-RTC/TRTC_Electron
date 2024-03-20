@@ -54,7 +54,7 @@ import trtcState from '../../common/trtc-state';
 import Log from '../../common/log';
 import TRTCCloud from 'trtc-electron-sdk';
 let logger = new Log('trtcIndex');
-const trtcCloud = new TRTCCloud();
+const trtcCloud = TRTCCloud.getTRTCShareInstance();
 export default {
   data() {
     return {

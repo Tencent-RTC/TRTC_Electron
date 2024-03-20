@@ -79,7 +79,7 @@ import TRTCCloud from 'trtc-electron-sdk';
 import {createLiveRoom, getLiveRoomList} from '../../common/live-room-service';
 import trtcState from '../../common/trtc-state';
 let logger = new Log('liveIndex');
-const trtcCloud = new TRTCCloud();
+const trtcCloud = TRTCCloud.getTRTCShareInstance();
 export default {
   data() {
     return {

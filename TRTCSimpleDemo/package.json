@@ -1,7 +1,7 @@
 {
   "name": "trtc-electron-simple-demo",
   "productName": "trtcElectronSimpleExternal",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "private": true,
   "main": "main.electron.js",
   "author": {
@@ -54,6 +54,13 @@
           "filter": [
             "**/*"
           ]
+        },
+        {
+          "from": "plugin/encrypt/win/${arch}/",
+          "to": "./resources/app/plugin/encrypt/win/${arch}/",
+          "filter": [
+            "**/*"
+          ]
         }
       ]
     },
@@ -66,6 +73,13 @@
         {
           "from": "node_modules/trtc-electron-sdk/build/mac-framework/${arch}/",
           "to": "./Frameworks"
+        },
+        {
+          "from": "plugin/encrypt/mac/",
+          "to": "./resources/app/plugin/encrypt/mac/",
+          "filter": [
+            "**/*"
+          ]
         }
       ]
     },
@@ -106,7 +120,7 @@
     "axios": "^0.21.1",
     "bootstrap-icons": "^1.0.0-alpha3",
     "core-js": "^3.6.4",
-    "trtc-electron-sdk": "^11.4.503",
+    "trtc-electron-sdk": "^11.7.602-beta.0",
     "vue": "^2.6.11",
     "vue-router": "^3.1.6"
   },
