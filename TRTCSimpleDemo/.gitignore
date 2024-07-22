@@ -8,3 +8,6 @@ build
 out/
 .idea
 .DS_Store
+*.bmp
+*.videoframe
+*.log

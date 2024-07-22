@@ -1,4 +1,4 @@
-const { app, BrowserWindow, systemPreferences, crashReporter, ipcMain } = require('electron');
+const { app, BrowserWindow, systemPreferences, crashReporter, ipcMain, protocol } = require('electron');
 const path = require('path');
 
 /**
@@ -162,6 +162,18 @@ async function createWindow() {
     win.loadURL(gerServer());
   }
 }
+
+protocol.registerSchemesAsPrivileged([
+  {
+    scheme: 'file',
+    privileges: {
+      standard: true,
+      secure: true,
+      allowServiceWorkers: true,
+      supportFetchAPI: true
+    }
+  }
+]);
 
 app.whenReady().then(() => {
   if (!app.isPackaged) {

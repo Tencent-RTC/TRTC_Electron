@@ -3,8 +3,10 @@
     <nav-bar :title="'房间号：' + roomId+'；用户：'+userId"></nav-bar>
 
     <div id="video-container"></div>
+    <div id="beauty-setting-panel" v-show="isBeautySettingVisiable">
+      <beauty-panel @on-change="handleBeautyEffectChange"/>
+    </div>
     <div id="controll-bar">
-
       <b-button variant="link" @click="toggleMic">
         <b-iconstack font-scale="1">
           <b-icon icon="mic-fill" color="white"></b-icon> 
@@ -15,8 +17,21 @@
       <b-button variant="link" @click="toggleCamera">
         <b-iconstack font-scale="1">
           <b-icon icon="camera-video-fill" color="white"></b-icon>
-          <b-icon icon="slash" variant="danger"  v-if="isDisableCamara"></b-icon>
+          <b-icon icon="slash" variant="danger"  v-if="isDisableCamera"></b-icon>
         </b-iconstack>
+      </b-button>
+
+      <b-button variant="link" class="btn-beauty" @click="toggleBeauty">
+        <b-iconstack font-scale="1">
+          <b-icon icon="emoji-laughing" color="white"></b-icon>
+          <b-icon icon="slash" variant="danger" v-if="isDisableBeauty"></b-icon>
+        </b-iconstack>   
+        <span 
+          class="btn-beauty-more" 
+          :class="{'is-open': isBeautySettingVisiable}"
+          v-if="!isDisableBeauty" 
+          @click="toggleBeautySetting"
+        ></span>     
       </b-button>
 
       <b-button variant="link">
@@ -61,9 +76,13 @@ import TRTCCloud, {
   TRTCBeautyStyle,
   Rect,
   TRTCScreenCaptureProperty,
-  TRTCPluginType
+  TRTCPluginType,
+  TRTCVideoPixelFormat,
+  TRTCVideoBufferType,
 } from 'trtc-electron-sdk';
 import showScreenCpature from '../../components/show-screen-capture.vue';
+import BeautyPanel from '../../components/beauty-panel.vue';
+import { XmagicLicense, TRTCXmagicFactory } from '../../constant/beauty';
 import genTestUserSig from '../../debug/gen-test-user-sig';
 import trtcState from '../../common/trtc-state';
 import Log from '../../common/log';
@@ -73,9 +92,11 @@ const logger = new Log(`trtcRoom`);
 
 let trtcCloud = null; // 用于TRTCQcloud 实例， mounted 时实体化
 let encryptPlugin = null; // 自定义加解密插件
+let beautyPlugin = null;
 export default {
   components: {
-    'show-screen-capture': showScreenCpature
+    'show-screen-capture': showScreenCpature,
+    'beauty-panel': BeautyPanel,
   },
   data() {
     return {
@@ -85,7 +106,9 @@ export default {
       videosList: [],
       streamType: TRTCVideoStreamType.TRTCVideoStreamTypeBig,
       isMuteMic: false,
-      isDisableCamara : false,
+      isDisableCamera : false,
+      isDisableBeauty: true,
+      isBeautySettingVisiable: false,
       isScreenSharing: false,
       isEncryptEnabled: false,
       getScreensTaskID: 0,
@@ -297,14 +320,36 @@ export default {
      * 开启 / 关闭摄像头
      */
     toggleCamera(event) {
-      this.isDisableCamara = !this.isDisableCamara;
-      if (this.isDisableCamara === true) {
+      this.isDisableCamera = !this.isDisableCamera;
+      if (this.isDisableCamera === true) {
         this.hideLocalCameraVideoDom();
       } else {
         this.startCameraAndMicDom();
       }
-      trtcCloud.muteLocalVideo(this.isDisableCamara);
-      logger.log('toggleCamera', this.isDisableCamara, event);
+      trtcCloud.muteLocalVideo(this.isDisableCamera);
+      logger.log('toggleCamera', this.isDisableCamera, event);
+    },
+
+    /**
+     * 开启/关闭摄象头美颜
+     */
+    toggleBeauty() {
+      this.isDisableBeauty = !this.isDisableBeauty;
+      if (!this.isDisableBeauty) {
+        this.startBeauty();
+      } else {
+        this.stopBeauty();
+      }
+      this.isBeautySettingVisiable = false;
+      logger.log("toggleBeauty is disabled:", this.isDisableBeauty);
+    },
+
+    /**
+     * 打开/关闭美颜参数设置区域
+     */
+    toggleBeautySetting(event) {
+      event.stopPropagation();
+      this.isBeautySettingVisiable = !this.isBeautySettingVisiable;
     },
 
     /**
@@ -465,6 +510,61 @@ export default {
     },
 
     /**
+     * 开启美颜
+     */
+    async startBeauty(type = 1) {
+      logger.log("startBeauty", type);
+      this.openPluginManager();
+      const currentCamera = trtcCloud.getCurrentCameraDevice();
+      logger.log("current camera:", currentCamera);
+      if (currentCamera) {
+        const libPath = await TRTCXmagicFactory.getEffectPluginLibPath();
+        beautyPlugin = trtcCloud.addPlugin({
+          id: `${currentCamera.deviceId}-${new Date().getTime()}`, // ID 可以随意设置，只要唯一、不重复就行
+          path: libPath,
+          type: 1,
+        });
+        console.log("startBeauty plugin:", beautyPlugin);
+        const initParam = await TRTCXmagicFactory.buildEffectInitParam(XmagicLicense);
+        console.log("startBeauty initParam:", initParam);
+        beautyPlugin.setParameter(JSON.stringify(initParam));
+        beautyPlugin.enable();
+
+        const beautySetting = {
+          beautySetting: []
+        };
+
+        const jsonParam = JSON.stringify(beautySetting);
+        logger.log("beauty parameter:", jsonParam);
+        beautyPlugin.setParameter(jsonParam);
+        window.__beautyPlugin = beautyPlugin;
+      }
+    },
+
+    /**
+     * 结束美颜
+     */
+    stopBeauty() {
+      logger.log("stopBeauty");
+      if (beautyPlugin) {
+        beautyPlugin.disable();
+        trtcCloud.removePlugin(beautyPlugin.id);
+      }
+      this.closePluginManager();
+    },
+
+    /**
+     * 处理美颜参数更新
+     * @param {*[]} effectProperties 
+     */
+    handleBeautyEffectChange(effectProperties) {
+      console.log("handleBeautyEffectChange", effectProperties);
+      beautyPlugin.setParameter(JSON.stringify({
+        beautySetting: effectProperties
+      }));
+    },
+
+    /**
      * 启动摄像头、麦克风，显示本地画面
      */
     startCameraAndMic() {
@@ -494,9 +594,25 @@ export default {
       logger.log('onSnapshotComplete:imageData:', imageData);
     },
 
+    // 开启插件管理器，支持美颜
+    openPluginManager() {
+      logger.log("openPluginManager", TRTCVideoPixelFormat, TRTCVideoBufferType);
+      trtcCloud.initPluginManager({
+        pixelFormat: TRTCVideoPixelFormat.TRTCVideoPixelFormat_BGRA32,
+        bufferType: TRTCVideoBufferType.TRTCVideoBufferType_Buffer,
+      });
+      trtcCloud.setPluginCallback((pluginId, errorCode, msg) => {
+        console.log(`plugin here plugin: ${pluginId}, errorCode: ${errorCode}, msg: ${msg}`);
+      });
+    },
+
+    closePluginManager() {
+      logger.log("closePluginManager");
+      trtcCloud.destroyPluginManager();
+    }
   },
 
-  mounted() {
+  async mounted() {
     // 没有摄像头，有麦克风，可以音频
     if (trtcState.isCameraReady() === false) {
       this.warn('找不到可用的摄像头，远端用户将无法看到您的画面。');
@@ -512,7 +628,7 @@ export default {
     // 获取 vue-router 传参：userId 和 roomId
     this.roomId = parseInt(this.$route.params.roomId); // roomId 为整数类型
     this.userId = this.$route.params.userId.toString(); // userId 为字符串类型
-    this.cameraId = decodeURIComponent(this.$route.params.cameraId.toString()); // 摄像头ID
+    this.cameraId = decodeURIComponent(this.$route.params.cameraId?.toString() || ""); // 摄像头ID
 
     if (!this.roomId || !this.userId) {
       this.$bvToast.toast('roomId 或 userId 为空，请填写后再试。');
@@ -549,7 +665,7 @@ export default {
      * 【推荐取值】 : Window 和 iMac 建议选择 640 × 360 及以上分辨率，resMode 选择 TRTCVideoResolutionModeLandscape
      * 【特别说明】 TRTCVideoResolution 默认只能横屏模式的分辨率，例如640 × 360。
      */
-    encParam.videoResolution = TRTCVideoResolution.TRTCVideoResolution_640_360;
+    encParam.videoResolution = TRTCVideoResolution.TRTCVideoResolution_1920_1080;
 
     /**
      * TRTCVideoResolutionMode
@@ -558,10 +674,10 @@ export default {
      *【特别说明】如果 videoResolution 指定分辨率 640 × 360，resMode 指定模式为 Portrait，则最终编码出的分辨率为360 × 640。
      */
     encParam.resMode = TRTCVideoResolutionMode.TRTCVideoResolutionModeLandscape;
-    encParam.videoFps = 24;
-    encParam.videoBitrate = 600;
-    encParam.minVideoBitrate = 200;
-    encParam.enableAdjustRes = true;
+    encParam.videoFps = 30;
+    encParam.videoBitrate = 2000;
+    encParam.minVideoBitrate = 2000;
+    encParam.enableAdjustRes = false;
     trtcCloud.setVideoEncoderParam(encParam)
 
     // 6. 开启美颜 
@@ -592,6 +708,11 @@ export default {
 
   beforeDestroy() {
     this.isScreenSharing = false;
+    if (!this.isDisableBeauty) {
+      this.stopBeauty();
+    }
+    trtcCloud.stopLocalPreview();
+    trtcCloud.stopLocalAudio();
   }
 };
 </script>
@@ -601,22 +722,52 @@ export default {
 #controll-bar {
   position: fixed;
   width: 100%;
-  height: 10vh;
+  height: 3rem;
   bottom: 0;
   left: 0;
   text-align: center;
   background-color: rgba(0,0,0, 0.3);
-  padding-top: 0.9em;
 }
 
 #controll-bar>button {
-  margin: 0 2em;
+  margin: 0 0.2em;
   border: none;
+  width: 5rem;
 }
 
 #controll-bar>button>.b-icon {
   width: 2.5;
 }
 
+#beauty-setting-panel {
+  position: fixed;
+  width: 70%;
+  height: 20rem;
+  bottom: 3rem;
+  left: 15%;
+}
 
+.btn-link:focus {
+  box-shadow: none;
+}
+
+.btn-beauty {
+  position: relative;
+}
+
+.btn-beauty-more {
+  position: absolute;
+  top: 1.25rem;
+  left: 4.125rem;
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.75rem;
+  transform: rotate(45deg);
+  border-top: 0.125rem solid white;
+  border-left: 0.125rem solid white;
+}
+.btn-beauty-more.is-open {
+  /* top: 1rem; */
+  transform: rotate(-135deg);
+}
 </style>

@@ -118,8 +118,8 @@ export default {
 
   },
   mounted() {
-      this.getDefaultCamera();
-      this.getCameraList();
+    this.getDefaultCamera();
+    this.getCameraList();
   }
 };
 </script>
