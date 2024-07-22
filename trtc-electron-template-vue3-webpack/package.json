@@ -1,0 +1,45 @@
+{
+  "name": "trtc-electron-template-vue3-webpack",
+  "version": "0.1.0",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "start": "electron .",
+    "build:win64": "electron-builder --win --x64",
+    "build:mac-x64": "electron-builder --mac --x64",
+    "build:mac-arm64": "electron-builder --mac --arm64",
+    "pack:win64": "npm run build && npm run build:win64",
+    "pack:mac-x64": "npm run build && npm run build:mac-x64",
+    "pack:mac-arm64": "npm run build && npm run build:mac-arm64"
+  },
+  "dependencies": {
+    "core-js": "^3.8.3",
+    "trtc-electron-sdk": "^11.9.604-beta.3",
+    "vue": "^3.2.13",
+    "vue-router": "^4.0.3"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/parser": "^5.4.0",
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-plugin-eslint": "~5.0.0",
+    "@vue/cli-plugin-router": "~5.0.0",
+    "@vue/cli-plugin-typescript": "~5.0.0",
+    "@vue/cli-service": "~5.0.0",
+    "@vue/eslint-config-typescript": "^9.1.0",
+    "electron": "^24.8.8",
+    "electron-builder": "^24.13.3",
+    "eslint": "^7.32.0",
+    "eslint-plugin-vue": "^8.0.3",
+    "native-ext-loader": "^2.3.0",
+    "sass": "^1.32.7",
+    "sass-loader": "^12.0.0",
+    "typescript": "~4.5.5"
+  },
+  "engines": {
+    "node": ">=16.14.0"
+  }
+}
