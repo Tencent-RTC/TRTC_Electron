@@ -1,16 +1,17 @@
 {
   "name": "trtc-electron-simple-demo",
   "productName": "trtcElectronSimpleExternal",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "private": true,
   "main": "main.electron.js",
   "author": {
-    "name": "Tencent Cloud TRTC Team",
+    "name": "Tencent Cloud",
     "email": "zackshi@tencent.com",
     "url": "https://www.tencentcloud.com/products/trtc"
   },
   "homepage": "https://github.com/LiteAVSDK/TRTC_Electron/tree/main/TRTCSimpleDemo",
   "scripts": {
+    "postinstall": "node build-tools/postinstall.js",
     "serve": "vue-cli-service serve",
     "lint": "vue-cli-service lint",
     "watch": "vue-cli-service build --watch",
@@ -18,15 +19,20 @@
     "build:win": "vue-cli-service build --target_platform=win32",
     "build:linux": "vue-cli-service build --target_platform=linux",
     "start": "concurrently \"npm run serve\" \"npm run electron \"",
+    "prestart": "node ./build-tools/prestart.js",
     "start:linux": "export  LD_LIBRARY_PATH=./node_modules/trtc-electron-sdk/build/Release:$LD_LIBRARY_PATH && sudo  ldconfig && npm run start",
     "electron": "electron .",
     "compile:mac": "electron-builder --mac",
+    "compile:mac-x64": "electron-builder --mac --x64",
+    "compile:mac-arm64": "electron-builder --mac --arm64",
     "compile:mac-universal": "electron-builder --mac --universal",
     "compile:win64": "electron-builder --win --x64",
     "compile:win32": "electron-builder --win --ia32",
     "compile:linux-x64": "electron-builder --linux --x64",
     "compile:linux-arm64": "electron-builder --linux --arm64",
     "pack:mac": "npm run build:mac && npm run compile:mac",
+    "pack:mac-x64": "npm run build:mac && npm run compile:mac-x64",
+    "pack:mac-arm64": "npm run build:mac && npm run compile:mac-arm64",
     "pack:mac-universal": "npm run build:mac && npm run compile:mac-universal",
     "pack:win64": "npm run build:win && npm run compile:win64",
     "pack:win32": "npm run build:win && npm run compile:win32",
@@ -34,15 +40,15 @@
     "pack:linux-arm64": "npm run build:linux && npm run compile:linux-arm64"
   },
   "build": {
-    "asar": true,
-    "asarUnpack": "**\\*.{node,dll}",
+    "asar": false,
     "productName": "trtc-electron-simple-demo",
-    "appId": "com.tencent.trtc-electron-simple-demo",
+    "appId": "com.tencentcloud.trtc-electron-simple-demo",
     "icon": "public/trtc-logo.png",
     "directories": {
       "output": "./bin"
     },
     "win": {
+      "artifactName": "${productName}_${version}.${ext}",
       "target": [
         "nsis",
         "zip"
@@ -61,6 +67,27 @@
           "filter": [
             "**/*"
           ]
+        },
+        {
+          "from": "node_modules/trtc-electron-plugin-xmagic/plugin/XMagic/win/${arch}/platforms/",
+          "to": "./platforms",
+          "filter": [
+            "**/*"
+          ]
+        },
+        {
+          "from": "node_modules/trtc-electron-plugin-xmagic/plugin/XMagic/win/${arch}/",
+          "to": "./resources/app/plugin/XMagic/win/${arch}/",
+          "filter": [
+            "**/*"
+          ]
+        },
+        {
+          "from": "node_modules/trtc-electron-plugin-xmagic/plugin/XMagic/win/res/",
+          "to": "./resources/app/plugin/XMagic/win/res/",
+          "filter": [
+            "**/*"
+          ]
         }
       ]
     },
@@ -76,12 +103,22 @@
         },
         {
           "from": "plugin/encrypt/mac/",
-          "to": "./resources/app/plugin/encrypt/mac/",
-          "filter": [
-            "**/*"
-          ]
+          "to": "./Resources/app/plugin/encrypt/mac/"
+        },
+        {
+          "from": "node_modules/trtc-electron-plugin-xmagic/plugin/XMagic/mac/",
+          "to": "./Resources/app/plugin/XMagic/mac/"
         }
-      ]
+      ],
+      "target": [
+        "dmg"
+      ],
+      "entitlements": "build-tools/entitlements.mac.plist",
+      "entitlementsInherit": "build-tools/entitlements.mac.plist",
+      "extendInfo": {
+        "NSCameraUsageDescription": "需要摄像头权限",
+        "NSMicrophoneUsageDescription": "需要麦克风权限"
+      }
     },
     "linux": {
       "artifactName": "${productName}_${version}.${ext}",
@@ -114,13 +151,24 @@
       "dist/**/*",
       "*.js",
       "!node_modules"
-    ]
+    ],
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "deleteAppDataOnUninstall": true,
+      "createDesktopShortcut": true,
+      "runAfterFinish": true,
+      "perMachine": true
+    },
+    "beforePack": "./build-tools/beforePack.js",
+    "afterPack": "./build-tools/afterPack.js"
   },
   "dependencies": {
     "axios": "^0.21.1",
     "bootstrap-icons": "^1.0.0-alpha3",
     "core-js": "^3.6.4",
-    "trtc-electron-sdk": "^11.7.602-beta.0",
+    "trtc-electron-plugin-xmagic": "^0.0.15",
+    "trtc-electron-sdk": "^11.9.604-beta.2",
     "vue": "^2.6.11",
     "vue-router": "^3.1.6"
   },

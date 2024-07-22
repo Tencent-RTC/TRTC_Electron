@@ -61,7 +61,7 @@ console.log('param:', param);
 let vueCliConfig = {
   publicPath: './',
   configureWebpack: {
-    devtool: 'source-map',
+    devtool: 'inline-source-map',
     module: {
       rules: [
         {
