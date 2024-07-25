@@ -1,0 +1,58 @@
+/**
+ * @see https://www.electron.build/configuration/configuration
+ */
+{
+  "productName": "trtc-electron-template-vue3-webpack",
+  "appId": "com.your-company-name.trtc-electron-template-vue3-webpack",
+  "asar": true,
+  "asarUnpack": "**\\*.{node,dll}",
+  "directories": {
+    "output": "release/${version}"
+  },
+  "files": [
+    "dist/**/*",
+    "*.js",
+    "!node_modules"
+  ],
+  "mac": {
+    "artifactName": "${productName}_${version}.${ext}",
+    "extraFiles": [
+      {
+        "from": "node_modules/trtc-electron-sdk/build/Release/${arch}/trtc_electron_sdk.node",
+        "to": "./Resources"
+      },
+      {
+        "from": "node_modules/trtc-electron-sdk/build/mac-framework/${arch}/",
+        "to": "./Frameworks"
+      }
+    ],
+    "target": ["dmg"],
+    "entitlements": "scripts/entitlements.mac.plist",
+    "entitlementsInherit": "scripts/entitlements.mac.plist",
+    "extendInfo": {
+      "NSCameraUsageDescription": "Need camera permission",
+      "NSMicrophoneUsageDescription": "Need microphone permission",
+    },
+  },
+  "win": {
+    "artifactName": "${productName}_${version}.${ext}",
+    "extraFiles": [
+      {
+        "from": "node_modules/trtc-electron-sdk/build/Release/",
+        "to": "./resources",
+        "filter": [
+          "**/*"
+        ]
+      },
+    ],
+    "target": ["nsis", "zip"],
+  },
+  "nsis": {
+    "oneClick": false,
+    "perMachine": true,
+    "allowToChangeInstallationDirectory": true,
+    "deleteAppDataOnUninstall": true,
+    "createDesktopShortcut": true,
+    "runAfterFinish": true,
+  }
+}
