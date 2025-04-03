@@ -1,86 +1,84 @@
 // vue.config.js
-const StringReplaceWebpackPlugin = require('string-replace-webpack-plugin');
-const os = require('os');
-console.log('process.argv:', process.argv);
-console.log('\n\n');
+const StringReplaceWebpackPlugin = require("string-replace-webpack-plugin");
+const os = require("os");
+console.log("process.argv:", process.argv);
+console.log("\n\n");
 
 function getArgvToObject() {
   let cmdArgvs = process.argv;
   let param = {};
-  let key = '';
+  let key = "";
   let tmp = [];
-  for (let i = 0 ; i<cmdArgvs.length; i++) {
-    if (/^--[\w\d_-]+/g.test(cmdArgvs[i])){
-      tmp = cmdArgvs[i].replace('--', '').split('=');
+  for (let i = 0; i < cmdArgvs.length; i++) {
+    if (/^--[\w\d_-]+/g.test(cmdArgvs[i])) {
+      tmp = cmdArgvs[i].replace("--", "").split("=");
       key = tmp[0].toUpperCase();
       param[key] = tmp[1];
     }
   }
-  console.log('getArgvToObject param: ', param);
-  return param
+  console.log("getArgvToObject param: ", param);
+  return param;
 }
 
 let param = getArgvToObject();
 
-const targetPlatform = (function(){
+const targetPlatform = (function () {
   let target = os.platform();
-  for (let i=0; i<process.argv.length; i++) {
-    if (process.argv[i].includes('--target_platform=')) {
-      target = process.argv[i].replace('--target_platform=', '');
+  for (let i = 0; i < process.argv.length; i++) {
+    if (process.argv[i].includes("--target_platform=")) {
+      target = process.argv[i].replace("--target_platform=", "");
       break;
     }
   }
-  if (!['win32', 'darwin', 'linux'].includes(target)) target = os.platform();
+  if (!["win32", "darwin", "linux"].includes(target)) target = os.platform();
   return target;
 })();
 
-console.log('targetPlatform', targetPlatform);
+console.log("targetPlatform", targetPlatform);
 
-const getRewritePath = function() {
-  let rewritePath = '';
-  if (process.env.NODE_ENV === 'production') {
+const getRewritePath = function () {
+  let rewritePath = "";
+  if (process.env.NODE_ENV === "production") {
     switch (targetPlatform) {
-      case 'win32':
-        rewritePath = './resources';
+      case "win32":
+        rewritePath = "./";
         break;
-      case 'darwin':
-        rewritePath = '../Resources';
+      case "darwin":
+        rewritePath = "../";
         break;
-      case 'linux':
-        rewritePath = './resources';
+      case "linux":
+        rewritePath = "./";
         break;
     }
-  } else if (process.env.NODE_ENV === 'development') {
-    rewritePath = 'node_modules/trtc-electron-sdk/build/Release';
+  } else if (process.env.NODE_ENV === "development") {
+    rewritePath = "node_modules/trtc-electron-sdk/build/Release";
   }
   return rewritePath;
 };
 
-console.log('param:', param);
+console.log("param:", param);
 
 let vueCliConfig = {
-  publicPath: './',
+  publicPath: "./",
   configureWebpack: {
-    devtool: 'inline-source-map',
+    devtool: "inline-source-map",
     module: {
       rules: [
         {
           test: /\.node$/,
-          loader: 'native-ext-loader',
+          loader: "native-ext-loader",
           options: {
-              emit: true,
-              rewritePath: getRewritePath()
-          }
-        }
+            emit: true,
+            rewritePath: getRewritePath(),
+          },
+        },
       ],
     },
-    plugins: [
-      new StringReplaceWebpackPlugin(),
-    ],
+    plugins: [new StringReplaceWebpackPlugin()],
     node: {
-      process: false
-    }
-  }
-}
+      process: false,
+    },
+  },
+};
 
 module.exports = vueCliConfig;

@@ -61,10 +61,7 @@ TRTCXmagicEffectConstant["EFFECT_MAKEUP"].options = TRTCXmagicEffectConstant["EF
     label_en: "Peach",
     effKey: platform === "win32" ? "makeup.strength" : "video_fenfenxia",
     valueType: TRTCXmagicEffectValueType.ZERO_ONE,
-    resPath: 
-      platform === "win32"
-        ? "makeupMotionRes.bundle/video_fenfenxia/template.json"
-        : "makeupMotionRes.bundle/video_fenfenxia",
+    resPath: "makeupMotionRes.bundle/video_fenfenxia/template.json",
     icon: "./assets/beauty_panel/panel_icon/makeup_icon/video_fenfenxia.png"
   },
   { 
@@ -72,10 +69,7 @@ TRTCXmagicEffectConstant["EFFECT_MAKEUP"].options = TRTCXmagicEffectConstant["EF
     label_en: "Sunburn",
     effKey: platform === "win32" ? "makeup.strength" : "video_shaishangzhuang",
     valueType: TRTCXmagicEffectValueType.ZERO_ONE,
-    resPath:
-        platform === "win32"
-          ? "makeupMotionRes.bundle/video_shaishangzhuang/template.json"
-          : "makeupMotionRes.bundle/video_shaishangzhuang",
+    resPath: "makeupMotionRes.bundle/video_shaishangzhuang/template.json",
     icon: "./assets/beauty_panel/panel_icon/makeup_icon/video_shaishangzhuang.png"
   },
 ]);
@@ -86,10 +80,7 @@ TRTCXmagicEffectConstant["EFFECT_MOTION"]["2dOptions"] = TRTCXmagicEffectConstan
     label: "兔兔酱",
     label_en: "Bunny",
     effKey: "video_tutujiang",
-    resPath: 
-      platform === "win32"
-        ? "2dMotionRes.bundle/video_tutujiang/template.json"
-        : "2dMotionRes.bundle",
+    resPath: "2dMotionRes.bundle/video_tutujiang/template.json",
     icon: "./assets/beauty_panel/panel_icon/motions_icon/video_tutujiang.png",
     valueType: TRTCXmagicEffectValueType.NONE,
   },
@@ -99,10 +90,7 @@ TRTCXmagicEffectConstant["EFFECT_MOTION"]["3dOptions"] = TRTCXmagicEffectConstan
     label: "知性玫瑰",
     label_en: "Glasses",
     effKey: "video_zhixingmeigui",
-    resPath:
-      platform === "win32"
-        ? "3dMotionRes.bundle/video_zhixingmeigui/template.json"
-        : "3dMotionRes.bundle",
+    resPath: "3dMotionRes.bundle/video_zhixingmeigui/template.json",
     icon:"./assets/beauty_panel/panel_icon/motions_icon/video_zhixingmeigui.png",
     valueType: TRTCXmagicEffectValueType.NONE,
   },
@@ -112,10 +100,7 @@ TRTCXmagicEffectConstant["EFFECT_MOTION"]["handOptions"] = TRTCXmagicEffectConst
     label: "樱花女孩",
     label_en: "Sakura",
     effKey: "video_sakuragirl",
-    resPath: 
-      platform === "win32" 
-        ? "handMotionRes.bundle/video_sakuragirl/template.json"
-        : "handMotionRes.bundle",
+    resPath: "handMotionRes.bundle/video_sakuragirl/template.json",
     icon:"./assets/beauty_panel/panel_icon/motions_icon/video_sakuragirl.png",
     valueType: TRTCXmagicEffectValueType.NONE,
   },

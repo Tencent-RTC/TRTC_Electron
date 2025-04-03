@@ -1,23 +1,23 @@
 <template name="trtc-room">
   <div id="trtc-room">
-    <nav-bar :title="'房间号：' + roomId+'；用户：'+userId"></nav-bar>
+    <nav-bar :title="'房间号：' + roomId + '；用户：' + userId"></nav-bar>
 
     <div id="video-container"></div>
     <div id="beauty-setting-panel" v-show="isBeautySettingVisiable">
-      <beauty-panel @on-change="handleBeautyEffectChange"/>
+      <beauty-panel @on-change="handleBeautyEffectChange" />
     </div>
     <div id="controll-bar">
       <b-button variant="link" @click="toggleMic">
         <b-iconstack font-scale="1">
-          <b-icon icon="mic-fill" color="white"></b-icon> 
-          <b-icon icon="slash" variant="danger"  v-if="isMuteMic" ></b-icon>
+          <b-icon icon="mic-fill" color="white"></b-icon>
+          <b-icon icon="slash" variant="danger" v-if="isMuteMic"></b-icon>
         </b-iconstack>
       </b-button>
 
       <b-button variant="link" @click="toggleCamera">
         <b-iconstack font-scale="1">
           <b-icon icon="camera-video-fill" color="white"></b-icon>
-          <b-icon icon="slash" variant="danger"  v-if="isDisableCamera"></b-icon>
+          <b-icon icon="slash" variant="danger" v-if="isDisableCamera"></b-icon>
         </b-iconstack>
       </b-button>
 
@@ -25,13 +25,13 @@
         <b-iconstack font-scale="1">
           <b-icon icon="emoji-laughing" color="white"></b-icon>
           <b-icon icon="slash" variant="danger" v-if="isDisableBeauty"></b-icon>
-        </b-iconstack>   
-        <span 
-          class="btn-beauty-more" 
-          :class="{'is-open': isBeautySettingVisiable}"
-          v-if="!isDisableBeauty" 
+        </b-iconstack>
+        <span
+          class="btn-beauty-more"
+          :class="{ 'is-open': isBeautySettingVisiable }"
+          v-if="!isDisableBeauty"
           @click="toggleBeautySetting"
-        ></span>     
+        ></span>
       </b-button>
 
       <b-button variant="link">
@@ -52,24 +52,30 @@
           <b-icon icon="power" variant="warning"></b-icon>
         </b-iconstack>
       </b-button>
-
     </div>
 
     <div>
-      <b-modal id="screens-list-modal" size="lg" title="可分享的窗口列表" v-model="screensListVisiable">
-        <show-screen-capture v-bind:list="screensList" v-bind:onClick="chooseWindowCapture"></show-screen-capture>
+      <b-modal
+        id="screens-list-modal"
+        size="lg"
+        title="可分享的窗口列表"
+        v-model="screensListVisiable"
+      >
+        <show-screen-capture
+          v-bind:list="screensList"
+          v-bind:onClick="chooseWindowCapture"
+        ></show-screen-capture>
       </b-modal>
     </div>
-
   </div>
 </template>
 
 <script>
 import TRTCCloud, {
-  TRTCAppScene, 
-  TRTCVideoStreamType, 
-  TRTCVideoFillMode, 
-  TRTCParams, 
+  TRTCAppScene,
+  TRTCVideoStreamType,
+  TRTCVideoFillMode,
+  TRTCParams,
   TRTCVideoEncParam,
   TRTCVideoResolution,
   TRTCVideoResolutionMode,
@@ -79,14 +85,14 @@ import TRTCCloud, {
   TRTCPluginType,
   TRTCVideoPixelFormat,
   TRTCVideoBufferType,
-} from 'trtc-electron-sdk';
-import showScreenCpature from '../../components/show-screen-capture.vue';
-import BeautyPanel from '../../components/beauty-panel.vue';
-import { XmagicLicense, TRTCXmagicFactory } from '../../constant/beauty';
-import genTestUserSig from '../../debug/gen-test-user-sig';
-import trtcState from '../../common/trtc-state';
-import Log from '../../common/log';
-import {BDVideoEncode, BDBeauty} from '../../common/bd-tools';
+} from "trtc-electron-sdk";
+import showScreenCpature from "../../components/show-screen-capture.vue";
+import BeautyPanel from "../../components/beauty-panel.vue";
+import { XmagicLicense, TRTCXmagicFactory } from "../../constant/beauty";
+import genTestUserSig from "../../debug/gen-test-user-sig";
+import trtcState from "../../common/trtc-state";
+import Log from "../../common/log";
+import { BDVideoEncode, BDBeauty } from "../../common/bd-tools";
 
 const logger = new Log(`trtcRoom`);
 
@@ -95,18 +101,18 @@ let encryptPlugin = null; // 自定义加解密插件
 let beautyPlugin = null;
 export default {
   components: {
-    'show-screen-capture': showScreenCpature,
-    'beauty-panel': BeautyPanel,
+    "show-screen-capture": showScreenCpature,
+    "beauty-panel": BeautyPanel,
   },
   data() {
     return {
-      roomId: 0, 
-      userId: '',
-      cameraId: '',
+      roomId: 0,
+      userId: "",
+      cameraId: "",
       videosList: [],
       streamType: TRTCVideoStreamType.TRTCVideoStreamTypeBig,
       isMuteMic: false,
-      isDisableCamera : false,
+      isDisableCamera: false,
       isDisableBeauty: true,
       isBeautySettingVisiable: false,
       isScreenSharing: false,
@@ -119,7 +125,6 @@ export default {
       // 存放远程用户视频列表
       remoteVideos: {},
       isRemoteScreenSharing: false, // 远程用户是否正在分享屏幕
-
     };
   },
 
@@ -128,7 +133,7 @@ export default {
       return Math.floor(this.videoContainer.clientWidth * 0.2);
     },
 
-    subStreamHeight () {
+    subStreamHeight() {
       return Math.floor(this.videoContainer.clientHeight * 0.2);
     },
   },
@@ -139,7 +144,10 @@ export default {
      */
     onError(errCode, errMsg) {
       logger.error(`SDK onError: ${errCode} ${errMsg}`);
-      window.appMonitor?.reportEvent('EnterVideoRoom', `failed#error:${errCode} ${errMsg}`);
+      window.appMonitor?.reportEvent(
+        "EnterVideoRoom",
+        `failed#error:${errCode} ${errMsg}`
+      );
     },
 
     /**
@@ -149,12 +157,12 @@ export default {
       logger.warn(`SDK onWarning: ${warningCode} ${warningMsg}`);
     },
 
-   /**
-    * 当进入房间时触发的回调
-    * @param {number} result - 进房结果， 大于 0 时，为进房间消耗的时间，这表示进进房成功。如果为 -1 ，则表示进房失败。
-    **/
+    /**
+     * 当进入房间时触发的回调
+     * @param {number} result - 进房结果， 大于 0 时，为进房间消耗的时间，这表示进进房成功。如果为 -1 ，则表示进房失败。
+     **/
     onEnterRoom(result) {
-      if ( result > 0 ) {
+      if (result > 0) {
         logger.log(`onEnterRoom，进房成功，使用了 ${result} 毫秒`);
         // 显示摄像头，开房麦克风，开始推流
         this.startCameraAndMic();
@@ -170,11 +178,11 @@ export default {
       logger.warn(`onExitRoom, reason: ${reason}`);
     },
 
-   /**
-    * 远程用户视频流的状态发生变更时触发。
-    * @param {number} uid - 用户标识
-    * @param {boolean} available - 画面是否开启
-    **/
+    /**
+     * 远程用户视频流的状态发生变更时触发。
+     * @param {number} uid - 用户标识
+     * @param {boolean} available - 画面是否开启
+     **/
     onUserVideoAvailable(uid, available) {
       logger.log(`onUserVideoAvailable: uid: ${uid}, available: ${available}`);
       if (available === 1) {
@@ -184,7 +192,6 @@ export default {
       }
     },
 
-    
     /***
      * 显示其他用户的视频
      * @param {number} uid - 用户ID
@@ -193,7 +200,7 @@ export default {
       let id = `${uid}-${this.roomId}-${TRTCVideoStreamType.TRTCVideoStreamTypeBig}`;
       let view = document.getElementById(id);
       if (!view) {
-        view = document.createElement('div');
+        view = document.createElement("div");
         view.id = id;
         this.videoContainer.appendChild(view);
       }
@@ -201,13 +208,16 @@ export default {
       view.style.height = `${this.subStreamHeight}px`;
       this.remoteVideos[id] = view;
       trtcCloud.startRemoteView(uid, view);
-      trtcCloud.setRemoteViewFillMode(uid, TRTCVideoFillMode.TRTCVideoFillMode_Fill);
+      trtcCloud.setRemoteViewFillMode(
+        uid,
+        TRTCVideoFillMode.TRTCVideoFillMode_Fill
+      );
       this.videoTypeSetting();
     },
 
     /**
      * 关闭其他用户的视频
-     * @param {number} uid 
+     * @param {number} uid
      */
     closeVideo(uid) {
       let id = `${uid}-${this.roomId}-${TRTCVideoStreamType.TRTCVideoStreamTypeBig}`;
@@ -222,14 +232,14 @@ export default {
      * 当远端用户进入本房间，创建对应对应的画面。
      */
     onRemoteUserEnterRoom(uid) {
-      logger.warn('onRemoteUserEnterRoom', uid);
+      logger.warn("onRemoteUserEnterRoom", uid);
     },
 
     /**
      * 当远端用户离开本房间时，关闭对应的画面。
      */
     onRemoteUserLeaveRoom(uid) {
-      logger.warn('onRemoteUserLeaveRoom', uid);
+      logger.warn("onRemoteUserLeaveRoom", uid);
       this.closeVideo(uid);
     },
 
@@ -257,7 +267,7 @@ export default {
       let H = this.subStreamHeight;
       let view = document.getElementById(id);
       if (!view) {
-        view = document.createElement('div');
+        view = document.createElement("div");
         view.id = id;
         view.style.width = `${W}px`;
         view.style.height = `${H}px`;
@@ -265,8 +275,11 @@ export default {
       }
       this.remoteVideos[id] = view;
       trtcCloud.startRemoteSubStreamView(uid, view);
-      trtcCloud.setRemoteSubStreamViewFillMode(uid, TRTCVideoFillMode.TRTCVideoFillMode_Fill);
-      this.videoTypeSetting()
+      trtcCloud.setRemoteSubStreamViewFillMode(
+        uid,
+        TRTCVideoFillMode.TRTCVideoFillMode_Fill
+      );
+      this.videoTypeSetting();
     },
 
     /**
@@ -274,7 +287,7 @@ export default {
      *
      * @param {*} uid
      */
-    closeRemoteScreenSharing (uid) {
+    closeRemoteScreenSharing(uid) {
       let id = `${uid}-${this.roomId}-${TRTCVideoStreamType.TRTCVideoStreamTypeSub}`;
       let view = document.getElementById(id);
       if (view) {
@@ -287,22 +300,24 @@ export default {
      * 对视频元素进行排版
      */
     videoTypeSetting() {
-      let marginTop =  80 ;
+      let marginTop = 80;
       let margin = 5;
       let H = this.subStreamHeight;
       let m = 0;
       let topIndex = 0;
       let remoteVideos = this.remoteVideos;
-      let typeClassName = '';
+      let typeClassName = "";
       let top = 0;
       let i = 0;
       for (let id in remoteVideos) {
-        topIndex = Math.floor( i / 2 );
-        typeClassName = i % 2 ===0 ? 'right' : 'left';
-        top = (topIndex * H + (topIndex+1) * margin )+ marginTop;
+        topIndex = Math.floor(i / 2);
+        typeClassName = i % 2 === 0 ? "right" : "left";
+        top = topIndex * H + (topIndex + 1) * margin + marginTop;
         remoteVideos[id].className = `user-video-container ${typeClassName}`;
         remoteVideos[id].style.top = `${top}px`;
-        logger.log(`videoTypeSetting: i:${i}, ti: ${topIndex}, top ${top}, H: ${H}, m: ${m}, id:${id},` );
+        logger.log(
+          `videoTypeSetting: i:${i}, ti: ${topIndex}, top ${top}, H: ${H}, m: ${m}, id:${id},`
+        );
         i++;
       }
     },
@@ -310,24 +325,52 @@ export default {
     /**
      * 开启 / 关闭麦克风
      */
-    toggleMic(event) {
-      this.isMuteMic = !this.isMuteMic;
+    async toggleMic(event) {
+      const isOwnDevicePrivilege =
+        await window.checkAndApplyDevicesAccessPrivilege("microphone", {
+          isShowDialog: true,
+          isJumpToPrivilegeSettings: true,
+        });
+      if (isOwnDevicePrivilege) {
+        this.isMuteMic = !this.isMuteMic;
+      } else {
+        this.isMuteMic = true;
+      }
       trtcCloud.muteLocalAudio(this.isMuteMic);
-      logger.log('toggleMic', this.isMuteMic, event);
-    }, 
-    
+      logger.log("toggleMic", this.isMuteMic, event);
+    },
+
     /**
      * 开启 / 关闭摄像头
      */
-    toggleCamera(event) {
-      this.isDisableCamera = !this.isDisableCamera;
-      if (this.isDisableCamera === true) {
+    async toggleCamera(event) {
+      const isOwnDevicePrivilege =
+        await window.checkAndApplyDevicesAccessPrivilege("camera", {
+          isShowDialog: true,
+          isJumpToPrivilegeSettings: true,
+        });
+      if (isOwnDevicePrivilege) {
+        this.isDisableCamera = !this.isDisableCamera;
+      } else {
+        this.isDisableCamera = true;
+      }
+      if (this.isDisableCamera) {
         this.hideLocalCameraVideoDom();
       } else {
         this.startCameraAndMicDom();
       }
       trtcCloud.muteLocalVideo(this.isDisableCamera);
-      logger.log('toggleCamera', this.isDisableCamera, event);
+      logger.log("toggleCamera", this.isDisableCamera, event);
+    },
+
+    async resetIconAndGetPrivilege() {
+      const microphonePrivilege = await window.checkAndApplyDevicesAccessPrivilege("microphone");
+      const cameraPrivilege = await window.checkAndApplyDevicesAccessPrivilege("camera");
+      this.isMuteMic = microphonePrivilege ? false : true;
+      this.isDisableCamera = cameraPrivilege ? false : true;
+      trtcCloud.muteLocalVideo(this.isDisableCamera);
+      trtcCloud.muteLocalAudio(this.isMuteMic);
+      return { microphonePrivilege, cameraPrivilege };
     },
 
     /**
@@ -358,7 +401,7 @@ export default {
     toggleScreenSharing() {
       if (this.isRemoteScreenSharing === true) {
         this.$bvToast.toast(`其他主播正在分享屏幕，您现在无法分享。`, {
-          variant: 'warning',
+          variant: "warning",
         });
         return;
       }
@@ -376,28 +419,42 @@ export default {
     toggleEncrypting() {
       if (!this.isEncryptEnabled) {
         // 开启自定义加解密
-        trtcCloud.setPluginParams(TRTCPluginType.TRTCPluginTypeMediaEncryptDecrypt, {enable: true});
+        trtcCloud.setPluginParams(
+          TRTCPluginType.TRTCPluginTypeMediaEncryptDecrypt,
+          { enable: true }
+        );
         trtcCloud.setPluginCallback((pluginId, errorCode, msg) => {
-          console.log(`plugin callback: ${pluginId}, errorCode: ${errorCode}, msg: ${msg}`);
+          console.log(
+            `plugin callback: ${pluginId}, errorCode: ${errorCode}, msg: ${msg}`
+          );
         });
-        let libPath= '';
-        if (process.platform === 'win32') {
+        let libPath = "";
+        if (process.platform === "win32") {
           if (process.arch === "x64") {
-            libPath = window.path.resolve(window.APP_PATH, 'plugin/encrypt/win/x64/MediaEncryptDecryptPlugin.dll');
+            libPath = window.path.resolve(
+              window.APP_PATH,
+              "plugin/encrypt/win/x64/MediaEncryptDecryptPlugin.dll"
+            );
           } else {
-            libPath = window.path.resolve(window.APP_PATH, 'plugin/encrypt/win/ia32/MediaEncryptDecryptPlugin.dll');
+            libPath = window.path.resolve(
+              window.APP_PATH,
+              "plugin/encrypt/win/ia32/MediaEncryptDecryptPlugin.dll"
+            );
           }
         } else {
-          libPath = window.path.resolve(window.APP_PATH, 'plugin/encrypt/mac/MediaEncryptDecryptPlugin.dylib');
+          libPath = window.path.resolve(
+            window.APP_PATH,
+            "plugin/encrypt/mac/MediaEncryptDecryptPlugin.dylib"
+          );
         }
         encryptPlugin = trtcCloud.addPlugin({
-          id: 'encrypt',
+          id: "encrypt",
           path: libPath,
           type: TRTCPluginType.TRTCPluginTypeMediaEncryptDecrypt,
         });
         encryptPlugin.enable();
         window._encryptPlugin = encryptPlugin;
-        
+
         this.isEncryptEnabled = true;
       } else {
         // 关闭自定义加解密
@@ -405,24 +462,27 @@ export default {
           encryptPlugin.disable();
           trtcCloud.removePlugin(encryptPlugin.id);
           encryptPlugin = null;
-          window._encryptPlugin =undefined;
+          window._encryptPlugin = undefined;
         }
-        trtcCloud.setPluginParams(TRTCPluginType.TRTCPluginTypeMediaEncryptDecrypt, {enable: false});
-        
+        trtcCloud.setPluginParams(
+          TRTCPluginType.TRTCPluginTypeMediaEncryptDecrypt,
+          { enable: false }
+        );
+
         this.isEncryptEnabled = false;
       }
     },
 
-    /** 
+    /**
      * 获取窗口列表，用于屏幕分享
      */
     getScreensList() {
       // 获取窗口快照，这是资源消耗很高的函数，做个防抖，防频繁点击。
       clearTimeout(this.getScreensTaskID);
       let my = this;
-      this.getScreensTaskID = setTimeout(()=>{
+      this.getScreensTaskID = setTimeout(() => {
         my.screensList = trtcCloud.getScreenCaptureSources(200, 160, 0, 0);
-        console.warn('getScreensList:', my.screensList);
+        console.warn("getScreensList:", my.screensList);
         my.screensListVisiable = true;
       }, 200);
     },
@@ -433,9 +493,11 @@ export default {
     chooseWindowCapture(event) {
       const sourceId = event.currentTarget.dataset.id;
 
-      const source = this.screensList.filter(item => item.sourceId === sourceId)[0];
+      const source = this.screensList.filter(
+        (item) => item.sourceId === sourceId
+      )[0];
       if (source) {
-        logger.log('chooseWindowCapture', source);
+        logger.log("chooseWindowCapture", source);
         this.startScreenShare(source);
         this.screensListVisiable = false;
         this.isScreenSharing = true;
@@ -444,7 +506,6 @@ export default {
         console.log(errMsg);
         this.logger.errMsg(errMsg);
       }
-      
     },
 
     startScreenShare(source) {
@@ -462,51 +523,57 @@ export default {
       trtcCloud.selectScreenCaptureTarget(source, rect, captureProperty);
       // // 方式二
       // trtcCloud.selectScreenCaptureTarget(
-      //   source.type, 
-      //   source.sourceId, 
-      //   source.sourceName, 
-      //   rect, 
-      //   true, 
+      //   source.type,
+      //   source.sourceId,
+      //   source.sourceName,
+      //   rect,
+      //   true,
       //   true
       // );
-      trtcCloud.startScreenCapture(null, TRTCVideoStreamType.TRTCVideoStreamTypeSub, new TRTCVideoEncParam(
-        TRTCVideoResolution.TRTCVideoResolution_1920_1080,
-        TRTCVideoResolutionMode.TRTCVideoResolutionModeLandscape,
-        24,
-        1600,
-        200,
-        true
-      ));
+      trtcCloud.startScreenCapture(
+        null,
+        TRTCVideoStreamType.TRTCVideoStreamTypeSub,
+        new TRTCVideoEncParam(
+          TRTCVideoResolution.TRTCVideoResolution_1920_1080,
+          TRTCVideoResolutionMode.TRTCVideoResolutionModeLandscape,
+          24,
+          1600,
+          200,
+          true
+        )
+      );
     },
 
-    stopScreenShare(){
+    stopScreenShare() {
       trtcCloud.stopScreenCapture();
     },
 
-    /** 
+    /**
      * 离开房间,会退回到入口页面。
      */
     exitRoom(event) {
-      logger.log('exitRoom', event);
+      logger.log("exitRoom", event);
       trtcCloud.exitRoom();
       let my = this;
-      setTimeout(()=>{
-        my.$router.push('/trtc-index');
-      }, 0 );
+      setTimeout(() => {
+        my.$router.push("/trtc-index");
+      }, 0);
     },
 
     /**
      * 隐藏摄像头画面
      */
     hideLocalCameraVideoDom() {
-      document.querySelector('div.local-video-container').style.display = 'none';
+      document.querySelector("div.local-video-container").style.display =
+        "none";
     },
 
     /**
      * 显示摄像头画面
      */
     startCameraAndMicDom() {
-      document.querySelector('div.local-video-container').style.display = 'inline-block';
+      document.querySelector("div.local-video-container").style.display =
+        "inline-block";
     },
 
     /**
@@ -525,13 +592,15 @@ export default {
           type: 1,
         });
         console.log("startBeauty plugin:", beautyPlugin);
-        const initParam = await TRTCXmagicFactory.buildEffectInitParam(XmagicLicense);
+        const initParam = await TRTCXmagicFactory.buildEffectInitParam(
+          XmagicLicense
+        );
         console.log("startBeauty initParam:", initParam);
         beautyPlugin.setParameter(JSON.stringify(initParam));
         beautyPlugin.enable();
 
         const beautySetting = {
-          beautySetting: []
+          beautySetting: [],
         };
 
         const jsonParam = JSON.stringify(beautySetting);
@@ -555,26 +624,31 @@ export default {
 
     /**
      * 处理美颜参数更新
-     * @param {*[]} effectProperties 
+     * @param {*[]} effectProperties
      */
     handleBeautyEffectChange(effectProperties) {
       console.log("handleBeautyEffectChange", effectProperties);
-      beautyPlugin.setParameter(JSON.stringify({
-        beautySetting: effectProperties
-      }));
+      beautyPlugin.setParameter(
+        JSON.stringify({
+          beautySetting: effectProperties,
+        })
+      );
     },
 
     /**
      * 启动摄像头、麦克风，显示本地画面
      */
-    startCameraAndMic() {
+    async startCameraAndMic() {
+      const { cameraPrivilege, microphonePrivilege } =
+        await this.resetIconAndGetPrivilege();
+      if (!cameraPrivilege || !microphonePrivilege) return;
       let id = `local_video-${this.roomId}-${TRTCVideoStreamType.TRTCVideoStreamTypeBig}`;
       logger.log(`startCameraAndMic: ${id}`);
       let view = document.getElementById(id);
       if (!view) {
-        view = document.createElement('div');
+        view = document.createElement("div");
         view.id = id;
-        view.className = 'local-video-container';
+        view.className = "local-video-container";
         this.videoContainer.appendChild(view);
       }
       trtcCloud.startLocalPreview(view);
@@ -584,55 +658,65 @@ export default {
     warn(message) {
       logger.warn(message);
       this.$bvToast.toast(message, {
-          title: '警告',
-          variant: 'warning',
-          solid: true
+        title: "警告",
+        variant: "warning",
+        solid: true,
       });
     },
     onSnapshotComplete(userId, streamType, imageData, width, height) {
-      logger.log(`onSnapshotComplete:userId: ${userId}, type: ${streamType} width: ${width}, height: ${height}`);
-      logger.log('onSnapshotComplete:imageData:', imageData);
+      logger.log(
+        `onSnapshotComplete:userId: ${userId}, type: ${streamType} width: ${width}, height: ${height}`
+      );
+      logger.log("onSnapshotComplete:imageData:", imageData);
     },
 
     // 开启插件管理器，支持美颜
     openPluginManager() {
-      logger.log("openPluginManager", TRTCVideoPixelFormat, TRTCVideoBufferType);
+      logger.log(
+        "openPluginManager",
+        TRTCVideoPixelFormat,
+        TRTCVideoBufferType
+      );
       trtcCloud.initPluginManager({
         pixelFormat: TRTCVideoPixelFormat.TRTCVideoPixelFormat_BGRA32,
         bufferType: TRTCVideoBufferType.TRTCVideoBufferType_Buffer,
       });
       trtcCloud.setPluginCallback((pluginId, errorCode, msg) => {
-        console.log(`plugin here plugin: ${pluginId}, errorCode: ${errorCode}, msg: ${msg}`);
+        console.log(
+          `plugin here plugin: ${pluginId}, errorCode: ${errorCode}, msg: ${msg}`
+        );
       });
     },
 
     closePluginManager() {
       logger.log("closePluginManager");
       trtcCloud.destroyPluginManager();
-    }
+    },
   },
 
   async mounted() {
     // 没有摄像头，有麦克风，可以音频
     if (trtcState.isCameraReady() === false) {
-      this.warn('找不到可用的摄像头，远端用户将无法看到您的画面。');
+      this.warn("找不到可用的摄像头，远端用户将无法看到您的画面。");
     }
     // 有摄像头，没有麦克风，可以视频
     if (trtcState.isMicReady() === false) {
-      this.warn('找不到可用的麦克风，远端用户将无法听到您的声音。');
+      this.warn("找不到可用的麦克风，远端用户将无法听到您的声音。");
     }
     // 1. 获取用于承载视频的 HTMLElement；
-    this.videoContainer = document.querySelector('#video-container');
+    this.videoContainer = document.querySelector("#video-container");
     logger.log(`mounted: `, this.$route.params);
 
     // 获取 vue-router 传参：userId 和 roomId
     this.roomId = parseInt(this.$route.params.roomId); // roomId 为整数类型
     this.userId = this.$route.params.userId.toString(); // userId 为字符串类型
-    this.cameraId = decodeURIComponent(this.$route.params.cameraId?.toString() || ""); // 摄像头ID
+    this.cameraId = decodeURIComponent(
+      this.$route.params.cameraId?.toString() || ""
+    ); // 摄像头ID
 
     if (!this.roomId || !this.userId) {
-      this.$bvToast.toast('roomId 或 userId 为空，请填写后再试。');
-      this.$router.push('trtc-index');
+      this.$bvToast.toast("roomId 或 userId 为空，请填写后再试。");
+      this.$router.push("trtc-index");
       return;
     }
     // 2. 计算签名
@@ -643,16 +727,27 @@ export default {
     logger.warn(`sdk version: ${trtcCloud.getSDKVersion()}`);
 
     // 4. 配置基本的事件订阅
-    trtcCloud.on('onError', this.onError.bind(this));
-    trtcCloud.on('onWarning', this.onWarning.bind(this));
-    trtcCloud.on('onStatistics', (statis)=>{logger.log('onStatistics', statis);});
-    trtcCloud.on('onEnterRoom', this.onEnterRoom.bind(this));
-    trtcCloud.on('onExitRoom', this.onExitRoom.bind(this));
-    trtcCloud.on('onUserVideoAvailable', this.onUserVideoAvailable.bind(this));
-    trtcCloud.on('onRemoteUserEnterRoom', this.onRemoteUserEnterRoom.bind(this));
-    trtcCloud.on('onRemoteUserLeaveRoom', this.onRemoteUserLeaveRoom.bind(this));
-    trtcCloud.on('onUserSubStreamAvailable', this.onUserSubStreamAvailable.bind(this));
-    trtcCloud.on('onSnapshotComplete', this.onSnapshotComplete.bind(this));
+    trtcCloud.on("onError", this.onError.bind(this));
+    trtcCloud.on("onWarning", this.onWarning.bind(this));
+    trtcCloud.on("onStatistics", (statis) => {
+      logger.log("onStatistics", statis);
+    });
+    trtcCloud.on("onEnterRoom", this.onEnterRoom.bind(this));
+    trtcCloud.on("onExitRoom", this.onExitRoom.bind(this));
+    trtcCloud.on("onUserVideoAvailable", this.onUserVideoAvailable.bind(this));
+    trtcCloud.on(
+      "onRemoteUserEnterRoom",
+      this.onRemoteUserEnterRoom.bind(this)
+    );
+    trtcCloud.on(
+      "onRemoteUserLeaveRoom",
+      this.onRemoteUserLeaveRoom.bind(this)
+    );
+    trtcCloud.on(
+      "onUserSubStreamAvailable",
+      this.onUserSubStreamAvailable.bind(this)
+    );
+    trtcCloud.on("onSnapshotComplete", this.onSnapshotComplete.bind(this));
     logger.log(`mounted, setCurrentCameraDevice('${this.cameraId}')`);
     trtcCloud.setCurrentCameraDevice(this.cameraId);
     // 5. 设置编码参数
@@ -665,7 +760,8 @@ export default {
      * 【推荐取值】 : Window 和 iMac 建议选择 640 × 360 及以上分辨率，resMode 选择 TRTCVideoResolutionModeLandscape
      * 【特别说明】 TRTCVideoResolution 默认只能横屏模式的分辨率，例如640 × 360。
      */
-    encParam.videoResolution = TRTCVideoResolution.TRTCVideoResolution_1920_1080;
+    encParam.videoResolution =
+      TRTCVideoResolution.TRTCVideoResolution_1920_1080;
 
     /**
      * TRTCVideoResolutionMode
@@ -678,9 +774,9 @@ export default {
     encParam.videoBitrate = 2000;
     encParam.minVideoBitrate = 2000;
     encParam.enableAdjustRes = false;
-    trtcCloud.setVideoEncoderParam(encParam)
+    trtcCloud.setVideoEncoderParam(encParam);
 
-    // 6. 开启美颜 
+    // 6. 开启美颜
     // setBeautyStyle 详细信息，请参考：https://web.sdk.qcloud.com/trtc/electron/doc/zh-cn/trtc_electron_sdk/TRTCCloud.html#setBeautyStyle
     trtcCloud.setBeautyStyle(TRTCBeautyStyle.TRTCBeautyStyleNature, 5, 5, 5);
 
@@ -691,15 +787,15 @@ export default {
     param.userSig = this.sdkInfo.userSig;
     param.roomId = this.roomId;
     param.userId = this.userId;
-    param.privateMapKey = ''; // 房间签名（非必填），7.1.157 版本以上（含），可以忽略此参数，7.1.157 之前的版本建议赋值为空字符串
-    param.businessInfo = '';  // 业务数据（非必填），7.1.157 版本以上（含），可以忽略此参数，7.1.157 之前的版本建议赋值为空字符串
+    param.privateMapKey = ""; // 房间签名（非必填），7.1.157 版本以上（含），可以忽略此参数，7.1.157 之前的版本建议赋值为空字符串
+    param.businessInfo = ""; // 业务数据（非必填），7.1.157 版本以上（含），可以忽略此参数，7.1.157 之前的版本建议赋值为空字符串
 
     /**
      * TRTCAppScene.TRTCAppSceneVideoCall: 视频通话场景，适合[1对1视频通话]、[300人视频会议]、[在线问诊]、[视频聊天]、[远程面试]等。
      */
     trtcCloud.enterRoom(param, TRTCAppScene.TRTCAppSceneVideoCall);
-    window.appMonitor?.reportEvent('EnterVideoRoom', 'success');
-    
+    window.appMonitor?.reportEvent("EnterVideoRoom", "success");
+
     // 挂到 windows BOM 下，方便调试。
     window.trtc = trtcCloud;
     window.videoEncode = new BDVideoEncode(trtcCloud);
@@ -713,12 +809,11 @@ export default {
     }
     trtcCloud.stopLocalPreview();
     trtcCloud.stopLocalAudio();
-  }
+  },
 };
 </script>
 
 <style scoped>
-
 #controll-bar {
   position: fixed;
   width: 100%;
@@ -726,16 +821,16 @@ export default {
   bottom: 0;
   left: 0;
   text-align: center;
-  background-color: rgba(0,0,0, 0.3);
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
-#controll-bar>button {
+#controll-bar > button {
   margin: 0 0.2em;
   border: none;
   width: 5rem;
 }
 
-#controll-bar>button>.b-icon {
+#controll-bar > button > .b-icon {
   width: 2.5;
 }
 
