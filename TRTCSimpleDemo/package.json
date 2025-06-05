@@ -56,7 +56,7 @@
       "extraFiles": [
         {
           "from": "node_modules/trtc-electron-sdk/build/Release/",
-          "to": "./resources",
+          "to": "./",
           "filter": [
             "**/*"
           ]
@@ -95,7 +95,7 @@
       "extraFiles": [
         {
           "from": "node_modules/trtc-electron-sdk/build/Release/${arch}/trtc_electron_sdk.node",
-          "to": "./Resources"
+          "to": "./"
         },
         {
           "from": "node_modules/trtc-electron-sdk/build/mac-framework/${arch}/",
@@ -131,7 +131,7 @@
       "extraFiles": [
         {
           "from": "node_modules/trtc-electron-sdk/build/Release/${arch}/trtc_electron_sdk.node",
-          "to": "./resources"
+          "to": "./"
         },
         {
           "from": "node_modules/trtc-electron-sdk/build/Release/${arch}/libliteavsdk.so",
@@ -168,7 +168,7 @@
     "bootstrap-icons": "^1.0.0-alpha3",
     "core-js": "^3.6.4",
     "trtc-electron-plugin-xmagic": "^1.0.0-beta.0",
-    "trtc-electron-sdk": "^11.9.604-beta.2",
+    "trtc-electron-sdk": "^12.5.705-beta.0",
     "vue": "^2.6.11",
     "vue-router": "^3.1.6"
   },
@@ -182,7 +182,7 @@
     "bootstrap-vue": "^2.12.0",
     "concurrently": "^5.2.0",
     "copy-webpack-plugin": "^5.1.1",
-    "electron": "^18.3.12",
+    "electron": "^25.9.8",
     "electron-builder": "^23.3.3",
     "electron-devtools-installer": "^3.2.0",
     "electron-node-loader": "^1.2.0",
